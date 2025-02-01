@@ -1,14 +1,12 @@
 import NextAuth from "next-auth";
 import Google from "next-auth/providers/google";
 import Credentials from "next-auth/providers/credentials";
-import { comparePassword} from "@/utils/password";
-import { getUserFromDb} from "@/utils/db";
-import { connectToDataBase} from "@/lib/mongodb";
-import User from "@/models/User"
+import { comparePassword } from "@/utils/password";
+import { connectToDataBase } from "@/lib/mongodb";
+import User from "@/models/User";
 
 export const { handlers, signIn, signOut, auth } = NextAuth({
-  providers: [ 
-
+  providers: [
     Google({
       async profile(profile) {
         await connectToDataBase();
@@ -16,11 +14,16 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         let user = await User.findOne({ email: profile.email });
 
         if (!user) {
+          // Create a new user with oauthProvider as 'google'
           user = await User.create({
             name: profile.name,
             email: profile.email,
-            provider: "google",
+            oauthProvider: "google",
           });
+        } else if (user.oauthProvider !== "google") {
+          // If the user exists but was created using credentials, update oauthProvider
+          user.oauthProvider = "google";
+          await user.save();
         }
 
         return {
@@ -32,35 +35,53 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       },
     }),
     Credentials({
-    // You can specify which fields should be submitted, by adding keys to the credentials object.
-    // e.g. domain, username, password, 2FA token, etc.
-    credentials: {
-      email: {  },
-      password: {},
-    },
- 
-authorize: async (credentials) => {
-  if (!credentials?.email || !credentials?.password) {
-    throw new Error("Missing credentials.");
-  }
+      credentials: {
+        email: {},
+        password: {},
+      },
 
-  const user = await getUserFromDb(credentials.email as string);
-  if (!user || !user.salt || !user.hashedPassword) {
-    throw new Error("Invalid credentials.");
-  }
+      async authorize(credentials) {
+        if (!credentials?.email || !credentials?.password) {
+          throw new Error("Missing credentials.");
+        }
 
-  const isPasswordValid = comparePassword(credentials.password as string, user.hashedPassword, user.salt);
-  if (!isPasswordValid) {
-    throw new Error("Invalid credentials.");
-  }
+        await connectToDataBase();
+        const user = await User.findOne({ email: credentials.email });
 
-  return { id: user.id, email: user.email, name: user.name };
-}
+        if (!user) {
+          throw new Error("User not found.");
+        }
 
-  }),],
+        // If user signed up with Google, ask them to set a password
+        if (user.oauthProvider === "google" && !user.hashedPassword) {
+          throw new Error("You signed up with Google. Set a password first.");
+        }
+
+        // Validate password if the user is signing in with credentials
+        if (user.oauthProvider === "credentials") {
+          const isPasswordValid = comparePassword(
+            credentials.password as string,
+            user.hashedPassword,
+            user.salt
+          );
+
+          if (!isPasswordValid) {
+            throw new Error("Invalid credentials.");
+          }
+        }
+
+        // Ensure the user has the correct oauthProvider set if they are trying to log in with credentials
+        if (user.oauthProvider !== "credentials") {
+          user.oauthProvider = "credentials";
+          await user.save();
+        }
+
+        return { id: user._id.toString(), email: user.email, name: user.name };
+      },
+    }),
+  ],
 
   pages: {
     signIn: "/signin",
-   
   },
-});  
+});
