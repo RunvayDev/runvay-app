@@ -1,8 +1,7 @@
 import Carousel from "@/components/Carousel";
-import Footer from "@/components/Footer";
 import Navbar from "@/components/Navbar";
 import CardSection from "@/components/CardSection";
-// import HeroSection from '@/components/HeroSection';
+import HeroSection from "@/components/HeroSection";
 import ButtonComponent from "@/components/ButtonComponent";
 import Link from "next/link";
 
@@ -130,7 +129,13 @@ export default function Home() {
           />
         </Link>
       </div>
-      {/* <HeroSection hTitle='Elevate Your Shopping Experience' subTitle='Discover the latest trends with unbeatable discounts.' hImage='/Runvay(logo).jpg' hColor1='from-blue-600' hColor2='to-cyan-300'/> */}
+      <HeroSection
+        hTitle="Elevate Your Shopping Experience"
+        subTitle="Discover the latest trends with unbeatable discounts."
+        hImage="/Runvay(logo).jpg"
+        hColor1="from-blue-600"
+        hColor2="to-cyan-300"
+      />
       <CardSection title="T-Shirts" products={products.slice(5, 10)} />
       <div className="flex items-center justify-center my-4 lg:mt-0 ">
         <Link href={{ pathname: "/search", query: { q: "T-Shirts" } }} passHref>
@@ -143,7 +148,13 @@ export default function Home() {
           />
         </Link>
       </div>
-      {/* <HeroSection hTitle='Brand New Collections' subTitle='Best deals on Hoodies, T-Shirts and Shirts' hImage='/carousel-sample.jpg' hColor1='from-rose-600' hColor2='to-orange-300'/> */}
+      <HeroSection
+        hTitle="Brand New Collections"
+        subTitle="Best deals on Hoodies, T-Shirts and Shirts"
+        hImage="/carousel-sample.jpg"
+        hColor1="from-rose-600"
+        hColor2="to-orange-300"
+      />
       <CardSection title="Hoodies" products={products.slice(10, 15)} />
       <div className="flex items-center justify-center my-4 lg:mt-0 ">
         <Link href={{ pathname: "/search", query: { q: "Hoodies" } }}>

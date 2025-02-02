@@ -11,7 +11,11 @@ export const hashPassword = (password: string, salt: string) => {
 };
 
 // Compare entered password with stored hash
-export const comparePassword = (enteredPassword: string, storedHash: string, salt: string) => {
+export const comparePassword = (
+  enteredPassword: string,
+  storedHash: string,
+  salt: string,
+) => {
   const hash = hashPassword(enteredPassword, salt);
   return hash === storedHash;
 };
