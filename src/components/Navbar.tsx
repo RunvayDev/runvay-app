@@ -5,6 +5,8 @@ import Image from "next/image";
 import { Menu, X } from "lucide-react";
 import { useRouter } from "next/navigation";
 import ButtonComponent from "./ButtonComponent";
+import { signOut, useSession } from "next-auth/react"; // Import NextAuth functions
+
 
 interface Product {
   id: string;
@@ -12,9 +14,13 @@ interface Product {
   category: string;
   price: number;
   image: string;
+  onClick?: () => void; // ✅ Ensure onClick is included
+
 }
 
 const Navbar = () => {
+  const { data: session } = useSession(); // Get user session
+
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
@@ -69,7 +75,7 @@ const Navbar = () => {
       <div className="flex justify-between items-center">
         <div className="text-xl font-bold">
           <Link href="/">
-            <Image src="/runvay-bl.jpg" width={120} height={40} alt="logo" />
+            <Image src="/Runvay(logo).jpg" width={120} height={40} alt="logo" />
           </Link>
         </div>
 
@@ -152,12 +158,27 @@ const Navbar = () => {
               <Image src="/shopping-cart.svg" width={30} height={30} alt="logo" />
             </Link>
           </div>
-          {!isLoggedIn && (
-            <div className="mt-4 lg:mt-0 border-2 border-black rounded-lg">
-              <ButtonComponent ButtonName="Sign Up / Login" TextColor="text-black" ButtonColor1="bg-transparent-500" ButtonColor2="hover:bg-gray-200" />
-            </div>
-          )
-          }
+          <div className="flex items-center space-x-4">
+            {session ? (
+              // If logged in, show Logout button
+              <button
+                onClick={() => signOut({ callbackUrl: "/" })}
+                className="border-2 border-black px-4 py-2 rounded-lg hover:bg-gray-200"
+              >
+                Logout
+              </button>
+            ) : (
+              // If not logged in, show Sign Up / Login button
+              <div className="border-2 border-black rounded-lg">
+                <ButtonComponent
+                  ButtonName="Sign Up / Login"
+                  TextColor="text-black"
+                  ButtonColor1="bg-transparent-500"
+                  ButtonColor2="hover:bg-gray-200"
+                  onClick={() => router.push("/signin")}                />
+              </div>
+            )}
+          </div>
         </nav>
       </div>
     </header>

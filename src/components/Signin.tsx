@@ -1,10 +1,11 @@
 "use client";
-
+import { useRouter } from "next/navigation";
 import { signIn } from "next-auth/react";
 import { FcGoogle } from "react-icons/fc";
 import { useState } from "react";
 
 export default function AuthForm() {
+  const router = useRouter(); 
   const [isSignUp, setIsSignUp] = useState(false);
   const [name, setName] = useState(""); // Added state for name
   const [email, setEmail] = useState("");
@@ -31,6 +32,7 @@ export default function AuthForm() {
       if (res.ok) {
         alert("Signup successful! Please sign in.");
         setIsSignUp(false);
+        router.push("/");
       } else {
         alert(data.error);
       }
@@ -40,7 +42,8 @@ export default function AuthForm() {
   };
   
   const handleGoogleSignIn = async () => {
-    await signIn("google");
+    await signIn("google",  { callbackUrl: "/" });
+    
   };
 
   return (
