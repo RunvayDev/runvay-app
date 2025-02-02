@@ -1,5 +1,30 @@
-import { getProductBySlug } from "@/lib/mongoose";
-import Image from "next/image";
+// app/products/[slug]/page.tsx
+import { getProductBySlug, getAllProducts } from "@/lib/mongoose";
+import { notFound } from "next/navigation";
+import ProductDetail from "@/components/ProductDetail";
+import ProductReviews from "@/components/ProductReviews";
+import SuggestedProducts from "@/components/SuggestedProducts";
+import Review from "@/models/Review";
+
+// Get reviews for a product
+async function getProductReviews(productId: string) {
+  const reviews = await Review.find({ productId })
+    .sort({ createdAt: -1 })
+    .limit(10);
+  return JSON.parse(JSON.stringify(reviews));
+}
+
+// Get suggested products (excluding current product)
+async function getSuggestedProducts(currentSlug: string, currentColor: string) {
+  const products = await getAllProducts();
+  return JSON.parse(
+    JSON.stringify(
+      products
+        .filter((p) => p.slug !== currentSlug && p.color.includes(currentColor))
+        .slice(0, 4),
+    ),
+  );
+}
 
 export default async function ProductPage({
   params,
@@ -9,15 +34,23 @@ export default async function ProductPage({
   const product = await getProductBySlug(params.slug);
 
   if (!product) {
-    return <div>Product not found!</div>;
+    notFound();
   }
 
+  const [reviews, suggestedProducts] = await Promise.all([
+    getProductReviews(product._id),
+    getSuggestedProducts(params.slug, product.color[0]),
+  ]);
+
+  const productData = JSON.parse(JSON.stringify(product));
+
   return (
-    <div>
-      <h1>{product.name}</h1>
-      <Image src={product.image} alt={product.name} />
-      <p>{product.description}</p>
-      <p>Price: ₹{product.price}</p>
-    </div>
+    <main className="min-h-screen py-8">
+      <ProductDetail product={productData} />
+      <div className="container mx-auto px-4">
+        <ProductReviews productId={product._id} initialReviews={reviews} />
+        <SuggestedProducts products={suggestedProducts} />
+      </div>
+    </main>
   );
 }
