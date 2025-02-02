@@ -31,7 +31,7 @@ const ProductCard = ({ image, name, price, originalPrice, discount }: ProductPro
 
         <div className="flex-grow"></div>
 
-        }
+        
         <div>
           <ButtonComponent ButtonName="Add to Cart" TextColor="text-white" ButtonColor1="bg-blue-500" ButtonColor2="hover:bg-blue-700"/>
         </div>

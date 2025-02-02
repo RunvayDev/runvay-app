@@ -1,8 +1,9 @@
+"use client"
 import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { Menu, X } from "lucide-react";
-import { useRouter } from "next/router";
+import { useRouter } from "next/navigation";
 import ButtonComponent from "./ButtonComponent";
 
 interface Product {
@@ -89,7 +90,7 @@ const Navbar = () => {
       <div className="flex justify-between items-center">
         <div className="text-xl font-bold">
           <Link href="/">
-            <Image src="/Runvay(logo).jpg" width={120} height={40} alt="logo" />
+            <Image src="/runvay-bl.jpg" width={120} height={40} alt="logo" />
           </Link>
         </div>
 

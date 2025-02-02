@@ -5,7 +5,7 @@ import { generateSalt, hashPassword } from "@/utils/password";
 
 export async function POST(req: Request) {
   try {
-    const { email, password, name } = await req.json();
+    const { email, password, name, oauthProvider } = await req.json();
 
     await connectToDataBase();
 
@@ -15,18 +15,29 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: "User already exists" }, { status: 400 });
     }
 
-    // Generate salt and hashed password
-    const salt = generateSalt();
-    const hashedPassword = hashPassword(password, salt);
+    let newUser;
 
-    // Save the user in the database
-    const newUser = await User.create({
-      email,
-      salt,
-      hashedPassword,
-      name,
-      oauthProvider: "credentials",
-    });
+    if (oauthProvider === "google") {
+      // If the user is signing up via Google
+      newUser = new User({
+        email,
+        name,
+        oauthProvider: "google", // Set oauthProvider to 'google'
+      });
+      await newUser.save();
+    } else {
+      // If the user is signing up with manual credentials
+      const salt = generateSalt();
+      const hashedPassword = hashPassword(password, salt);
+      newUser = new User({
+        email,
+        name,
+        salt,
+        hashedPassword,
+        oauthProvider: "credentials", // Set oauthProvider to 'credentials'
+      });
+      await newUser.save();
+    }
 
     return NextResponse.json({ message: "User created successfully", user: newUser }, { status: 201 });
   } catch (error) {
