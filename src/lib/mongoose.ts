@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+import Product from "../models/Product";
 
 const connectMongo = async () => {
   const dbUrl = process.env.DATABASE_URL;
@@ -18,5 +19,17 @@ const connectMongo = async () => {
     throw err;
   }
 };
+
+export async function getAllProducts() {
+  await connectMongo();
+  const products = await Product.find({});
+  return products;
+}
+
+export async function getProductBySlug(slug: string) {
+  await connectMongo();
+  const product = await Product.findOne({ slug }); // Find product by slug
+  return product;
+}
 
 export default connectMongo;
