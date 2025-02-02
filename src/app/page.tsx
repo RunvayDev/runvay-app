@@ -1,5 +1,4 @@
 import Carousel from "@/components/Carousel";
-import Footer from "@/components/Footer";
 import Navbar from "@/components/Navbar";
 import CardSection from "@/components/CardSection";
 import HeroSection from "@/components/HeroSection";
@@ -168,7 +167,6 @@ export default function Home() {
           />
         </Link>
       </div>
-      <Footer />
     </>
   );
 }
