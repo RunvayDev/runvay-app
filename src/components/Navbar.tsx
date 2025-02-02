@@ -75,7 +75,7 @@ const Navbar = () => {
       <div className="flex justify-between items-center">
         <div className="text-xl font-bold">
           <Link href="/">
-            <Image src="/Runvay(logo).jpg" width={120} height={40} alt="logo" />
+            <Image src="/runvay(logo).jpg" width={120} height={40} alt="logo" />
           </Link>
         </div>
 

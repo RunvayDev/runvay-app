@@ -14,32 +14,42 @@ export default function AuthForm() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-  
+
     if (isSignUp) {
       if (password !== confirmPassword) {
         alert("Passwords do not match");
         return;
       }
-  
+
       const res = await fetch("/api/signup", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ name, email, password }), // Sending name field
+        body: JSON.stringify({ name, email, password }),
       });
-  
+
       const data = await res.json();
-  
+
       if (res.ok) {
         alert("Signup successful! Please sign in.");
         setIsSignUp(false);
-        router.push("/");
       } else {
         alert(data.error);
       }
     } else {
-      await signIn("credentials", { email, password, redirect: false });
+      const result = await signIn("credentials", {
+        email,
+        password,
+        redirect: false, // Prevent NextAuth from automatically redirecting
+      });
+
+      if (result?.error) {
+        alert("Invalid credentials");
+      } else {
+        router.push("/"); // ✅ Redirect to home page after successful sign-in
+      }
     }
   };
+
   
   const handleGoogleSignIn = async () => {
     await signIn("google",  { callbackUrl: "/" });
@@ -50,7 +60,7 @@ export default function AuthForm() {
     <div className="flex justify-center items-center min-h-screen bg-gray-100">
       <div className="w-96 bg-white p-6 rounded-lg shadow-lg">
         <div className="flex justify-center mb-4">
-          <img src="/runvay-bl.jpg" alt="Logo" className="h-12 w-auto" />
+          <img src="/runvay(logo).jpg" alt="Logo" className="h-12 w-auto" />
         </div>
 
         <div className="flex border-b-2 border-gray-200 pb-2 mb-4 relative">
