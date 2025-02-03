@@ -4,6 +4,7 @@ import CardSection from "@/components/CardSection";
 import HeroSection from "@/components/HeroSection";
 import ButtonComponent from "@/components/ButtonComponent";
 import Link from "next/link";
+  
 
 const products = [
   {
@@ -113,8 +114,9 @@ const products = [
   },
 ];
 export default function Home() {
-  return (
+    return (
     <>
+
       <Navbar />
       <Carousel />
       <CardSection title="Shirts" products={products.slice(0, 5)} />
@@ -167,7 +169,9 @@ export default function Home() {
           />
         </Link>
       </div>
-       
+      
+             
+            
     </>
   );
 }
