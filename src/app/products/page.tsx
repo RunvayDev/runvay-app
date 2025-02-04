@@ -1,13 +1,13 @@
 import Link from "next/link";
 import { getAllProducts } from "@/lib/mongoose";
 import Image from "next/image";
-
+ 
 export default async function ProductsPage() {
   const products = await getAllProducts(); // Fetch all products from MongoDB
 
   return (
     <div>
-      <h1>All Products</h1>
+       <h1>All Products</h1>
       <div>
         {products.map((product) => (
           <Link key={product.slug} href={`/products/${product.slug}`}>

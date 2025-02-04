@@ -5,6 +5,7 @@ import Image from "next/image";
 import { Menu, X } from "lucide-react";
 import { useRouter } from "next/navigation";
 import ButtonComponent from "./ButtonComponent";
+import   CartIcon from "@/components/CartIcon";
 import { signOut, useSession } from "next-auth/react"; // Import NextAuth functions
 
 
@@ -154,9 +155,9 @@ const Navbar = () => {
                 </div>
               )}
             </div>
-            <Link href="/">
-              <Image src="/shopping-cart.svg" width={30} height={30} alt="logo" />
-            </Link>
+            <Link href="/cart">
+            <CartIcon />      
+                    </Link>
           </div>
           <div className="flex items-center space-x-4">
             {session ? (

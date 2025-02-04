@@ -1,4 +1,3 @@
-// app/products/[slug]/page.tsx
 import { getProductBySlug, getAllProducts } from "@/lib/mongoose";
 import { notFound } from "next/navigation";
 import ProductDetail from "@/components/ProductDetail";
@@ -17,13 +16,9 @@ async function getProductReviews(productId: string) {
 // Get suggested products (excluding current product)
 async function getSuggestedProducts(currentSlug: string, currentColor: string) {
   const products = await getAllProducts();
-  return JSON.parse(
-    JSON.stringify(
-      products
-        .filter((p) => p.slug !== currentSlug && p.color.includes(currentColor))
-        .slice(0, 4),
-    ),
-  );
+  return products
+    .filter((p) => p.slug !== currentSlug && p.color.includes(currentColor))
+    .slice(0, 4);
 }
 
 export default async function ProductPage({
@@ -42,11 +37,9 @@ export default async function ProductPage({
     getSuggestedProducts(params.slug, product.color[0]),
   ]);
 
-  const productData = JSON.parse(JSON.stringify(product));
-
   return (
     <main className="min-h-screen py-8">
-      <ProductDetail product={productData} />
+      <ProductDetail product={product} />
       <div className="container mx-auto px-4">
         <ProductReviews productId={product._id} initialReviews={reviews} />
         <SuggestedProducts products={suggestedProducts} />
