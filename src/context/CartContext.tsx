@@ -21,17 +21,22 @@ interface CartContextType {
   updateQuantity: (productId: string, size: string, color: string, newQuantity: number) => void;
   clearCart: () => void;
   cartTotal: number;
+  isLoaded: boolean;
+
 }
 
 const CartContext = createContext<CartContextType>({} as CartContextType);
 
 export function CartProvider({ children }: { children: React.ReactNode }) {
   const [cartItems, setCartItems] = useState<CartItem[]>([]);
+  const [isLoaded, setIsLoaded] = useState(false); // Track hydration
 
   useEffect(() => {
     const savedCart = localStorage.getItem('runvayCart');
     if (savedCart) {
       setCartItems(JSON.parse(savedCart));
+      setIsLoaded(true); // Mark as loaded after fetching data
+
     }
   }, []);
 
@@ -104,7 +109,9 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
       removeFromCart, 
       updateQuantity, 
       clearCart,
-      cartTotal
+      cartTotal,
+      isLoaded 
+
     }}>
       {children}
     </CartContext.Provider>
