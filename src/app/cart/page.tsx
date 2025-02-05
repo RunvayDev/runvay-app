@@ -4,8 +4,7 @@
 import { useCart } from '@/context/CartContext';
 import Image from 'next/image';
 import Link from 'next/link';
-import Navbar from '@/components/Navbar';
-
+ 
 export default function CartPage() {
   const { 
     cartItems, 
@@ -16,8 +15,7 @@ export default function CartPage() {
 
   return (
     <>
-    <Navbar/>
-    <div className="container mx-auto px-4 py-8">
+     <div className="container mx-auto px-4 py-8">
       <h1 className="text-3xl font-bold mb-8">Shopping Cart</h1>
       
       {cartItems.length === 0 ? (

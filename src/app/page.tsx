@@ -1,6 +1,5 @@
 import Carousel from "@/components/Carousel";
-import Navbar from "@/components/Navbar";
-import CardSection from "@/components/CardSection";
+ import CardSection from "@/components/CardSection";
 import HeroSection from "@/components/HeroSection";
 import ButtonComponent from "@/components/ButtonComponent";
 import Link from "next/link";
@@ -117,8 +116,7 @@ export default function Home() {
     return (
     <>
 
-      <Navbar />
-      <Carousel />
+       <Carousel />
       <CardSection title="Shirts" products={products.slice(0, 5)} />
       <div className="flex items-center justify-center my-4 lg:mt-0 ">
         <Link href={{ pathname: "/search", query: { q: "Shirts" } }}>

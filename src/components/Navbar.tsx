@@ -15,7 +15,7 @@ interface Product {
   category: string;
   price: number;
   image: string;
-  onClick?: () => void; // ✅ Ensure onClick is included
+  onClick?: () => void;  
 
 }
 
@@ -23,8 +23,7 @@ const Navbar = () => {
   const { data: session } = useSession(); // Get user session
 
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [searchQuery, setSearchQuery] = useState("");
+   const [searchQuery, setSearchQuery] = useState("");
   const [showSuggestions, setShowSuggestions] = useState(false);
   const [suggestions, setSuggestions] = useState<Product[]>([]);
   const searchRef = useRef<HTMLDivElement>(null);
@@ -155,13 +154,14 @@ const Navbar = () => {
                 </div>
               )}
             </div>
-          </div>
-          <div>
-
-            <Link href="/cart">
               <CartIcon />
-            </Link>
           </div>
+             
+           
+              
+         
+
+           
           <div className="flex items-center space-x-4">
             {session ? (
               // If logged in, show Logout button
