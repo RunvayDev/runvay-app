@@ -1,4 +1,3 @@
-// app/products/[slug]/page.tsx
 import { getProductBySlug, getAllProducts } from "@/lib/mongoose";
 import { notFound } from "next/navigation";
 import ProductDetail from "@/components/ProductDetail";
@@ -45,9 +44,9 @@ export default async function ProductPage({
   const productData = JSON.parse(JSON.stringify(product));
 
   return (
-    <main className="min-h-screen py-8">
-      <ProductDetail product={productData} />
+    <main className="min-h-screen py-8 bg-white">
       <div className="container mx-auto px-4">
+        <ProductDetail product={productData} />
         <ProductReviews productId={product._id} initialReviews={reviews} />
         <SuggestedProducts products={suggestedProducts} />
       </div>
