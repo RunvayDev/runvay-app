@@ -84,4 +84,31 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
   pages: {
     signIn: "/signin",
   },
+
+  callbacks: {
+    async session({ session, token }: { session: any; token: any }) {
+      // Add custom fields to the session object
+      session.user.id = token.id;
+      session.user.email = token.email;
+      session.user.name = token.name;
+ 
+      // Optionally add other custom fields (e.g., role, preferences)
+      return session;
+    },
+
+    async jwt({ token, user }: { token: any; user: any }) {
+      // Add user information to the JWT token
+      if (user) {
+        token.id = user.id;
+        token.email = user.email;
+        token.name = user.name;
+       }
+
+      return token;
+    },
+  },
+
+  session: {
+    strategy: "jwt", // Use JWT-based sessions (optional)
+  },
 });

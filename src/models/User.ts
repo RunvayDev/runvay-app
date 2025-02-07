@@ -8,6 +8,7 @@ interface User extends Document {
   oauthProvider?: string;
   createdAt: Date;
   updatedAt: Date;
+  cart: CartItem[]; // Add this line
 }
 
 const userSchema = new Schema<User>(
@@ -16,8 +17,13 @@ const userSchema = new Schema<User>(
     salt: { type: String }, // Store salt
     hashedPassword: { type: String }, // Store hashed password
     name: { type: String, required: true },
-    oauthProvider: { type: String, enum: ["google", "credentials"], default: "credentials" },
-  },
+    oauthProvider: {
+      type: String,
+      enum: ["google", "credentials"],
+      default: "credentials",
+    },
+    cart: { type: Array, default: [] },
+  }, // Add this line
   { timestamps: true }
 );
 

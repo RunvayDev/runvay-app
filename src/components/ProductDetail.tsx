@@ -2,8 +2,10 @@
 "use client";
 import { useState } from "react";
 import Image from "next/image";
+import AddToCartButton from "@/components/AddToCartButton"; // Import the AddToCartButton
 
 type Product = {
+  _id: string; // Add _id to match the schema
   name: string;
   description: string;
   price: number;
@@ -113,16 +115,18 @@ export default function ProductDetail({ product }: { product: Product }) {
             </div>
           </div>
 
-          <button
-            className={`w-full py-3 rounded transition ${
-              product.stock > 0
-                ? "bg-blue-600 hover:bg-blue-700 text-white"
-                : "bg-gray-400 cursor-not-allowed text-gray-200"
-            }`}
-            disabled={product.stock === 0}
-          >
-            {product.stock > 0 ? "Add to Cart" : "Out of Stock"}
-          </button>
+          {/* Add to Cart Button */}
+          <AddToCartButton
+            product={{
+              _id: product._id, // Ensure _id is passed
+              name: product.name,
+              price: product.price,
+              slug: product.slug,
+              images: product.images,
+            }}
+            selectedSize={selectedSize}
+            selectedColor={selectedColor}
+          />
         </div>
       </div>
     </div>
