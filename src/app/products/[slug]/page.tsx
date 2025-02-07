@@ -42,6 +42,7 @@ export default async function ProductPage({
     <main className="min-h-screen py-8">
       <ProductDetail product={product} />
       <div className="container mx-auto px-4">
+        <ProductDetail product={product} />
         <ProductReviews productId={product._id} initialReviews={reviews} />
         <SuggestedProducts products={suggestedProducts} />
       </div>

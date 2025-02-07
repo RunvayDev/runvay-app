@@ -16,12 +16,12 @@ interface Profile extends Document {
 const profileSchema = new mongoose.Schema({
   user: { type: mongoose.Schema.Types.ObjectId, ref: "User", required: true },
   email: { type: String },
-  phoneNumber: { type: String, required: true },
+  phoneNumber: { type: String, required: true, default: "" },
   shippingAddress: {
-    street: { type: String },
-    city: { type: String },
-    zip: { type: String },
-    country: { type: String },
+    street: { type: String, default: "" },
+    city: { type: String, default: "" },
+    zip: { type: String, default: "" },
+    country: { type: String, default: "" },
   },
   orders: [{ type: mongoose.Schema.Types.ObjectId, ref: "Order" }],
 });
