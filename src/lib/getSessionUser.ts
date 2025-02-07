@@ -1,10 +1,7 @@
- 
-import { auth } from "@/lib/auth"
+// lib/authServer.ts (Server-Side Only)
+import  { auth} from "./auth"
 
-export async function getSessionUser(req: Request) {
+export const fetchSession = async () => {
   const session = await auth();
-  if (!session || !session.user) {
-    throw new Error("Unauthorized");
-  }
-  return session.user;
-}
+  return session;
+};

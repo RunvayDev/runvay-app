@@ -6,7 +6,7 @@ if (!MONGO_URI) {
   throw new Error("Mongo URI is not defined");
 }
 let cached = global.mongoose;
-
+  
 
 if (!cached) 
   cached = global.mongoose = { conn: null, promise: null };
