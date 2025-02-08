@@ -6,6 +6,7 @@ interface ButtonProps {
   ButtonColor1: string;
   ButtonColor2: string;
   className?: string;
+  width?:string;
   onClick?: () => void;  
 }
 
@@ -15,13 +16,14 @@ const ButtonComponent = ({
   ButtonColor2,
   TextColor,
   className = "",
+  width="w-64",
   onClick,  
 }: ButtonProps) => {
   return (
     <button
       type="button"
       onClick={onClick}  
-      className={`w-full ${ButtonColor1} ${TextColor} py-2 px-4 rounded-lg ${ButtonColor2} transition-all duration-300 ${className}`}
+      className={`${width} ${ButtonColor1} ${TextColor} py-2 px-4 rounded-lg ${ButtonColor2} transition-all duration-300 ${className}`}
     >
       {ButtonName}
     </button>
