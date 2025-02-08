@@ -5,6 +5,7 @@ import Image from "next/image";
 import { Menu, X } from "lucide-react";
 import { useRouter } from "next/navigation";
 import ButtonComponent from "./ButtonComponent";
+import CartIcon from "@/components/CartIcon";
 import { useSession } from "next-auth/react"; // Import NextAuth functions
 
 interface Product {
@@ -159,9 +160,7 @@ const Navbar = ({ products }: NavbarProps) => {
               )}
             </div>
 
-            <Link href="/">
-              <Image src="/shopping-cart.svg" width={30} height={30} alt="logo" />
-            </Link>
+           <CartIcon/>
 
           
           <div className="relative" ref={profileRef}>
