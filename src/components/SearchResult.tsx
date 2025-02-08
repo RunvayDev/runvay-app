@@ -33,10 +33,9 @@ const SearchResult = ({ products }: SearchProps) => {
 
   const uniqueColors = [...new Set(products.flatMap((p) => p.color))];
   const uniqueSizes = [...new Set(products.flatMap((p) => p.size))];
-    
-  
-    // Show only first 5 colors unless showAll is true
-    const visibleColors = showAllColors ? uniqueColors : uniqueColors.slice(0, 5);
+
+  // Show only first 5 colors unless showAll is true
+  const visibleColors = showAllColors ? uniqueColors : uniqueColors.slice(0, 5);
 
   const handleColorChange = (color: string) => {
     setFilters((prevFilters) => ({
@@ -58,20 +57,20 @@ const SearchResult = ({ products }: SearchProps) => {
 
   useEffect(() => {
     let results = products.filter((product) =>
-      product.name.toLowerCase().includes(searchQuery)
+      product.name.toLowerCase().includes(searchQuery),
     );
 
     // Apply color filter
     if (filters.colors.length > 0) {
       results = results.filter((product) =>
-        product.color.some((color) => filters.colors.includes(color))
+        product.color.some((color) => filters.colors.includes(color)),
       );
     }
 
     // Apply size filter
     if (filters.sizes.length > 0) {
       results = results.filter((product) =>
-        product.size.some((size) => filters.sizes.includes(size))
+        product.size.some((size) => filters.sizes.includes(size)),
       );
     }
 
@@ -146,7 +145,9 @@ const SearchResult = ({ products }: SearchProps) => {
             <h3 className="text-lg font-semibold mb-2">Sort By</h3>
             <select
               className="w-full border p-2"
-              onChange={(e) => setFilters({ ...filters, sortBy: e.target.value })}
+              onChange={(e) =>
+                setFilters({ ...filters, sortBy: e.target.value })
+              }
               value={filters.sortBy}
             >
               <option value="">Select</option>
@@ -160,10 +161,10 @@ const SearchResult = ({ products }: SearchProps) => {
       {/* Mobile Filter Button */}
       <div className="m-4">
         <button
-            className="lg:hidden sticky fixed top-4 left-4 bg-blue-500 text-white px-4 py-2 rounded z-50 w-fit"
-            onClick={() => setIsFilterOpen(true)}
+          className="lg:hidden sticky fixed top-4 left-4 bg-blue-500 text-white px-4 py-2 rounded z-50 w-fit"
+          onClick={() => setIsFilterOpen(true)}
         >
-            Show Filters
+          Show Filters
         </button>
       </div>
 
@@ -177,27 +178,29 @@ const SearchResult = ({ products }: SearchProps) => {
             >
               ✕ Close
             </button>
-            <h2 className="text-xl font-bold mb-4 border-black border-b pb-4">Filters</h2>
+            <h2 className="text-xl font-bold mb-4 border-black border-b pb-4">
+              Filters
+            </h2>
             {/* Color Filter */}
             <div className="space-y-4 mb-4 border-black border-b pb-4 ">
-                <span className="font-bold">Colors</span>
-                {visibleColors.map((color) => (
+              <span className="font-bold">Colors</span>
+              {visibleColors.map((color) => (
                 <label key={color} className="block">
-                    <input
+                  <input
                     type="checkbox"
                     value={color}
                     checked={filters.colors.includes(color)}
                     onChange={() => handleColorChange(color)}
                     className="mr-2"
-                    />
-                    <span
+                  />
+                  <span
                     style={{ backgroundColor: color, opacity: 0.7 }}
                     className="w-4 h-4 inline-block  rounded-full mr-2 shadow-[0_0_0_1px_#000]"
                   ></span>
-                    {color}
+                  {color}
                 </label>
-                ))}
-                {uniqueColors.length > 5 && (
+              ))}
+              {uniqueColors.length > 5 && (
                 <button
                   onClick={() => setShowAllColors(!showAllColors)}
                   className="text-black-500 text-sm mt-2  hover:underline"
@@ -209,37 +212,39 @@ const SearchResult = ({ products }: SearchProps) => {
 
             {/* Size Filter */}
             <div className="space-y-4 mb-4 border-black border-b pb-4">
-                {uniqueSizes.map((size) => (
+              {uniqueSizes.map((size) => (
                 <label key={size} className="block">
-                    <input
+                  <input
                     type="checkbox"
                     value={size}
                     checked={filters.sizes.includes(size)}
                     onChange={() => handleSizeChange(size)}
                     className="mr-2"
-                    />
-                    {size}
+                  />
+                  {size}
                 </label>
-                ))}
+              ))}
             </div>
             <div>
-                <h3 className="text-lg font-semibold mb-2">Sort By</h3>
-                <select
-                    className="w-full border p-2"
-                    onChange={(e) => setFilters({ ...filters, sortBy: e.target.value })}
-                    value={filters.sortBy}
-                >
-                    <option value="">Select</option>
-                    <option value="price_low">Price: Low to High</option>
-                    <option value="price_high">Price: High to Low</option>
-                </select>
+              <h3 className="text-lg font-semibold mb-2">Sort By</h3>
+              <select
+                className="w-full border p-2"
+                onChange={(e) =>
+                  setFilters({ ...filters, sortBy: e.target.value })
+                }
+                value={filters.sortBy}
+              >
+                <option value="">Select</option>
+                <option value="price_low">Price: Low to High</option>
+                <option value="price_high">Price: High to Low</option>
+              </select>
             </div>
           </div>
         </div>
       )}
 
-{/* Products Grid */}
-<div className="flex-1 p-4">
+      {/* Products Grid */}
+      <div className="flex-1 p-4">
         <h1 className="text-2xl font-bold mb-4">
           {searchQuery ? `Results for "${searchQuery}"` : "All Products"}
         </h1>
@@ -247,12 +252,10 @@ const SearchResult = ({ products }: SearchProps) => {
         {filteredProducts.length === 0 ? (
           <p className="text-gray-600 text-center">No products found.</p>
         ) : (
-          <div className="py-2 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 auto-rows-fr justify-items-center">    
+          <div className="py-2 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 auto-rows-fr justify-items-center">
             {filteredProducts.map((product) => (
-              <Link key={product.slug} href={`/product/${product.slug}`}>
-                
-                  <ProductCard product={product} />
-                
+              <Link key={product.slug} href={`/products/${product.slug}`}>
+                <ProductCard product={product} />
               </Link>
             ))}
           </div>
