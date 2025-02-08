@@ -1,134 +1,44 @@
 import Carousel from "@/components/Carousel";
- import CardSection from "@/components/CardSection";
+import CardSection from "@/components/CardSection";
 import HeroSection from "@/components/HeroSection";
-import ButtonComponent from "@/components/ButtonComponent";
-import Link from "next/link";
-  
+import { getCachedProducts } from "@/lib/productCache";
+import { Product } from "@/types/Product"; 
 
-const products = [
-  {
-    image: "/sample-hoodie.jpg",
-    name: "T-Shirts",
-    price: 999,
-    originalPrice: 2499,
-    discount: 1500,
-  },
-  {
-    image: "/sample-hoodie.jpg",
-    name: "",
-    price: 999,
-    originalPrice: 2999,
-    discount: 2000,
-  },
-  {
-    image: "/sample-hoodie.jpg",
-    name: "Hoodies",
-    price: 949,
-    originalPrice: 1799,
-    discount: 850,
-  },
-  {
-    image: "/sample-hoodie.jpg",
-    name: "Hoodies",
-    price: 949,
-    originalPrice: 1799,
-    discount: 850,
-  },
-  {
-    image: "/sample-hoodie.jpg",
-    name: "Hoodies",
-    price: 949,
-    originalPrice: 1799,
-    discount: 850,
-  },
-  {
-    image: "/sample-hoodie.jpg",
-    name: "Hoodies",
-    price: 949,
-    originalPrice: 1799,
-    discount: 850,
-  },
-  {
-    image: "/sample-hoodie.jpg",
-    name: "Hoodies",
-    price: 949,
-    originalPrice: 1799,
-    discount: 850,
-  },
-  {
-    image: "/sample-hoodie.jpg",
-    name: "Hoodies",
-    price: 949,
-    originalPrice: 1799,
-    discount: 850,
-  },
-  {
-    image: "/sample-hoodie.jpg",
-    name: "Hoodies",
-    price: 949,
-    originalPrice: 1799,
-    discount: 850,
-  },
-  {
-    image: "/sample-hoodie.jpg",
-    name: "Hoodies",
-    price: 949,
-    originalPrice: 1799,
-    discount: 850,
-  },
-  {
-    image: "/sample-hoodie.jpg",
-    name: "Hoodies",
-    price: 949,
-    originalPrice: 1799,
-    discount: 850,
-  },
-  {
-    image: "/sample-hoodie.jpg",
-    name: "Hoodies",
-    price: 949,
-    originalPrice: 1799,
-    discount: 850,
-  },
-  {
-    image: "/sample-hoodie.jpg",
-    name: "Hoodies",
-    price: 949,
-    originalPrice: 1799,
-    discount: 850,
-  },
-  {
-    image: "/sample-hoodie.jpg",
-    name: "Hoodies",
-    price: 949,
-    originalPrice: 1799,
-    discount: 850,
-  },
-  {
-    image: "/sample-hoodie.jpg",
-    name: "Hoodies",
-    price: 949,
-    originalPrice: 1799,
-    discount: 850,
-  },
-];
-export default function Home() {
-    return (
+
+
+export default async function Home() {
+  const products: Product[] = await getCachedProducts();
+
+  // Select only a few products to show (e.g., latest 5 products)
+  const featuredProducts = products.slice(0, 5).map((product) => ({
+    name: product.name,
+    description: product.description || "",  // Handle optional description
+    price: product.price,
+    stock: product.stock,
+    size: product.size || [],
+    color: product.color || [],
+    images: product.images || [],
+    slug: product.slug,
+  }));
+
+  const topPicks = products.slice(5, 10).map((product) => ({
+    name: product.name,
+    description: product.description || "",  // Handle optional description
+    price: product.price,
+    stock: product.stock,
+    size: product.size || [],
+    color: product.color || [],
+    images: product.images || [],
+    slug: product.slug,
+  }));
+
+  return (
     <>
+      <Carousel />
 
-       <Carousel />
-      <CardSection title="Shirts" products={products.slice(0, 5)} />
-      <div className="flex items-center justify-center my-4 lg:mt-0 ">
-        <Link href={{ pathname: "/search", query: { q: "Shirts" } }}>
-          <ButtonComponent
-            ButtonName="See all products &rarr;"
-            TextColor="text-black"
-            ButtonColor1="bg-transparent-500"
-            ButtonColor2="hover:bg-gray-200"
-            className="font-bold"
-          />
-        </Link>
-      </div>
+      {/* Featured Products Section */}
+      <CardSection title="Trending Picks" products={featuredProducts} />
+
       <HeroSection
         hTitle="Elevate Your Shopping Experience"
         subTitle="Discover the latest trends with unbeatable discounts."
@@ -136,48 +46,17 @@ export default function Home() {
         hColor1="from-blue-600"
         hColor2="to-cyan-300"
       />
-      <CardSection title="T-Shirts" products={products.slice(5, 10)} />
-      <div className="flex items-center justify-center my-4 lg:mt-0 ">
-        <Link href={{ pathname: "/search", query: { q: "T-Shirts" } }} passHref>
-          <ButtonComponent
-            ButtonName="See all products &rarr;"
-            TextColor="text-black"
-            ButtonColor1="bg-transparent-500"
-            ButtonColor2="hover:bg-gray-200"
-            className="font-bold"
-          />
-        </Link>
-      </div>
-      <HeroSection
-        hTitle="Brand New Collections"
-        subTitle="Best deals on Hoodies, T-Shirts and Shirts"
-        hImage="/carousel-sample.jpg"
-        hColor1="from-rose-600"
-        hColor2="to-orange-300"
-      />
-      <CardSection title="Hoodies" products={products.slice(10, 15)} />
-      <div className="flex items-center justify-center my-4 lg:mt-0 ">
-        <Link href={{ pathname: "/search", query: { q: "Hoodies" } }}>
-          <ButtonComponent
-            ButtonName="See all products &rarr;"
-            TextColor="text-black"
-            ButtonColor1="bg-transparent-500"
-            ButtonColor2="hover:bg-gray-200"
-            className="font-bold"
-          />
-        </Link>
-      </div>
       
-             
-            
+      {/* Top Picks Section */}
+      <CardSection title="Top Picks" products={topPicks} />
+
+      <HeroSection
+        hTitle="Latest Collection"
+        subTitle="Shop the latest collection of the season."
+        hImage="/Runvay(logo).jpg"
+        hColor1="from-rose-400"
+        hColor2="to-yellow-600"
+      />
     </>
   );
 }
-
-// Example
-
-// import { auth } from "@/lib/auth"
-// const session = await auth()
-// if (!session?.user) return null
-//   console.log(session.user.name);
-//   console.log(session.user.email);

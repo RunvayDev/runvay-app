@@ -1,43 +1,51 @@
-"use client"
+"use client";
 import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { Menu, X } from "lucide-react";
 import { useRouter } from "next/navigation";
 import ButtonComponent from "./ButtonComponent";
-import   CartIcon from "@/components/CartIcon";
-import { signOut, useSession } from "next-auth/react"; // Import NextAuth functions
-
+import { useSession } from "next-auth/react"; // Import NextAuth functions
 
 interface Product {
-  id: string;
   name: string;
-  category: string;
+  description?: string;
   price: number;
-  image: string;
-  onClick?: () => void; // ✅ Ensure onClick is included
-
+  stock: number;
+  size?: string[];
+  color?: string[];
+  images: string[];
+  slug: string;
 }
 
-const Navbar = () => {
+interface NavbarProps {
+  products: Product[];
+}
+
+const Navbar = ({ products }: NavbarProps) => {
   const { data: session } = useSession(); // Get user session
 
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const [showSuggestions, setShowSuggestions] = useState(false);
   const [suggestions, setSuggestions] = useState<Product[]>([]);
+  const [showProfileMenu, setShowProfileMenu] = useState(false);
+
   const searchRef = useRef<HTMLDivElement>(null);
+  const profileRef = useRef<HTMLDivElement>(null);
   const router = useRouter();
 
-  // Sample product data - in a real app, this would come from your database
-  const products: Product[] = [
-    { id: "1", name: "Classic White Shirt", category: "Shirts", price: 49.99, image: "/sample-hoodie.jpg" },
-    { id: "2", name: "Black T-Shirt", category: "T-Shirts", price: 24.99, image: "/sample-hoodie.jpg" },
-    { id: "3", name: "Gray Hoodie", category: "Hoodies", price: 59.99, image: "/sample-hoodie.jpg" },
-    // Add more products as needed
-  ];
-
+  useEffect(() => {
+    // Close dropdown when clicking outside
+    const handleClickOutside = (event: MouseEvent) => {
+      if (profileRef.current && !profileRef.current.contains(event.target as Node)) {
+        setShowProfileMenu(false);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
+  
   useEffect(() => {
     // Close suggestions when clicking outside
     const handleClickOutside = (event: MouseEvent) => {
@@ -75,9 +83,15 @@ const Navbar = () => {
     <header className="bg-white shadow-md p-4">
       <div className="flex justify-between items-center">
         <div className="text-xl font-bold">
-          <Link href="/">
-            <Image src="/runvay(logo).jpg" width={120} height={40} alt="logo" />
-          </Link>
+        <Link 
+          href="/" 
+          onClick={(e) => {
+            e.preventDefault();
+            window.location.href = "/"; // Full page reload
+          }}
+        >
+          <Image src="/runvay(logo).jpg" width={120} height={40} alt="logo" />
+        </Link>
         </div>
 
         <div className="lg:hidden">
@@ -88,27 +102,16 @@ const Navbar = () => {
 
         <nav className={`${isMenuOpen ? 'flex flex-col absolute top-16 left-0 right-0 bg-white p-4 shadow-md z-10' : 'hidden'} lg:flex lg:items-center lg:space-x-4 lg:static lg:shadow-none lg:p-0`}>
           <ul className="flex flex-col lg:flex-row space-y-4 lg:space-y-0 lg:space-x-4">
+            {/* Other menu items */}
             <li>
-            <Link href={{ pathname: "/search", query: { q: "Shirts" } }} passHref>
-              <span className="relative text-lg font-medium text-gray-700 hover:text-black transition-colors duration-300 after:content-[''] after:absolute after:left-0 after:bottom-0 after:w-0 after:h-[2px] after:bg-black after:transition-all after:duration-300 hover:after:w-full cursor-pointer">
-                Shirts
-              </span>
-            </Link>
-          </li>
-          <li>
-            <Link href={{ pathname: "/search", query: { q: "T-Shirts" } }} passHref>
-              <span className="relative text-lg font-medium text-gray-700 hover:text-black transition-colors duration-300 after:content-[''] after:absolute after:left-0 after:bottom-0 after:w-0 after:h-[2px] after:bg-black after:transition-all after:duration-300 hover:after:w-full cursor-pointer">
-                T-Shirts
-              </span>
-            </Link>
-          </li>
-          <li>
-            <Link href={{ pathname: "/search", query: { q: "Hoodies" } }} passHref>
-              <span className="relative text-lg font-medium text-gray-700 hover:text-black transition-colors duration-300 after:content-[''] after:absolute after:left-0 after:bottom-0 after:w-0 after:h-[2px] after:bg-black after:transition-all after:duration-300 hover:after:w-full cursor-pointer">
-                Hoodies
-              </span>
-            </Link>
-</li>
+              <Link href={{ pathname: "/search", query: { q: "Shirt" } }} className="relative text-lg font-medium text-gray-700 hover:text-black transition-colors duration-300 after:content-[''] after:absolute after:left-0 after:bottom-0 after:w-0 after:h-[2px] after:bg-black after:transition-all after:duration-300 hover:after:w-full">Shirts</Link>
+            </li>
+            <li>
+              <Link href={{ pathname: "/search", query: { q: "T-Shirt" } }} className="relative text-lg font-medium text-gray-700 hover:text-black transition-colors duration-300 after:content-[''] after:absolute after:left-0 after:bottom-0 after:w-0 after:h-[2px] after:bg-black after:transition-all after:duration-300 hover:after:w-full">T-Shirts</Link>
+            </li>
+            <li>
+              <Link href={{ pathname: "/search", query: { q: "Hoodie" } }} className="relative text-lg font-medium text-gray-700 hover:text-black transition-colors duration-300 after:content-[''] after:absolute after:left-0 after:bottom-0 after:w-0 after:h-[2px] after:bg-black after:transition-all after:duration-300 hover:after:w-full">Hoodies</Link>
+            </li>
             <li>
               <Link href="/" className="relative text-lg font-medium text-gray-700 hover:text-black transition-colors duration-300 after:content-[''] after:absolute after:left-0 after:bottom-0 after:w-0 after:h-[2px] after:bg-black after:transition-all after:duration-300 hover:after:w-full">My Orders</Link>
             </li>
@@ -135,12 +138,12 @@ const Navbar = () => {
                 <div className="absolute top-full left-0 right-0 bg-white border border-gray-200 rounded-md mt-1 shadow-lg z-50 max-h-60 overflow-y-auto">
                   {suggestions.map((product) => (
                     <div
-                      key={product.id}
+                      key={product.slug}
                       className="p-2 hover:bg-gray-100 cursor-pointer flex items-center"
                       onClick={() => handleSearchSubmit(product.name)}
                     >
                       <Image
-                        src={product.image}
+                        src={product.images[0]} // Assuming there's at least one image
                         width={40}
                         height={40}
                         alt={product.name}
@@ -148,38 +151,62 @@ const Navbar = () => {
                       />
                       <div>
                         <div className="font-medium">{product.name}</div>
-                        <div className="text-sm text-gray-600">${product.price}</div>
+                        <div className="text-sm text-gray-600">₹{product.price}</div>
                       </div>
                     </div>
                   ))}
                 </div>
               )}
             </div>
-            
-            <CartIcon />      
-                     
-          </div>
-          <div className="flex items-center space-x-4">
-            {session ? (
-              // If logged in, show Logout button
-              <button
-                onClick={() => signOut({ callbackUrl: "/" })}
-                className="border-2 border-black px-4 py-2 rounded-lg hover:bg-gray-200"
-              >
-                Logout
-              </button>
-            ) : (
-              // If not logged in, show Sign Up / Login button
-              <div className="border-2 border-black rounded-lg">
-                <ButtonComponent
-                  ButtonName="Sign Up / Login"
-                  TextColor="text-black"
-                  ButtonColor1="bg-transparent-500"
-                  ButtonColor2="hover:bg-gray-200"
-                  onClick={() => router.push("/signin")}                />
-              </div>
-            )}
-          </div>
+
+            <Link href="/">
+              <Image src="/shopping-cart.svg" width={30} height={30} alt="logo" />
+            </Link>
+
+          
+          <div className="relative" ref={profileRef}>
+              {session ? (
+                <>
+                  <button onClick={() => setShowProfileMenu(!showProfileMenu)} className="border border-black rounded-full p-1 flex items-center">
+                    <Image src="/profile.svg" width={30} height={30} alt="profile" />
+                  </button>
+
+                  {showProfileMenu && (
+                    <div className="absolute right-0 top-full mt-2 w-40 bg-white shadow-md border rounded-md z-50">
+                      <ul className="py-2">
+                        <li>
+                          <Link href="/profile" className="block px-4 py-2 hover:bg-gray-100">
+                            Profile
+                          </Link>
+                        </li>
+                        <li>
+                          <Link href="/settings" className="block px-4 py-2 hover:bg-gray-100">
+                            Settings
+                          </Link>
+                        </li>
+                        <li>
+                          <button className="block w-full text-left px-4 py-2 hover:bg-gray-100" onClick={() => alert("Logging out...")}>
+                            Logout
+                          </button>
+                        </li>
+                      </ul>
+                    </div>
+                  )}
+                </>
+              ) : (
+                <div className="border-2 border-black rounded-lg">
+                  <ButtonComponent
+                    ButtonName="Sign Up / Login"
+                    TextColor="text-black"
+                    ButtonColor1="bg-transparent-500"
+                    ButtonColor2="hover:bg-gray-200"
+                    width="w-35"
+                    onClick={() => router.push("/signin")}
+                  />
+                </div>
+              )}
+            </div>
+            </div>
         </nav>
       </div>
     </header>
@@ -187,3 +214,5 @@ const Navbar = () => {
 };
 
 export default Navbar;
+
+
