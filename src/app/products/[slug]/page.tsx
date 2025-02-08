@@ -17,16 +17,21 @@ async function getProductReviews(productId: string) {
 async function getSuggestedProducts(currentSlug: string, currentColor: string) {
   const products = await getAllProducts();
   return products
-    .filter((p) => p.slug !== currentSlug && p.color.includes(currentColor))
+    .filter((p) => p.slug !== currentSlug && p.color?.includes(currentColor))
     .slice(0, 4);
 }
 
+// Ensure `params.slug` exists before using it
 export default async function ProductPage({
   params,
 }: {
-  params: { slug: string };
+  params?: { slug?: string };
 }) {
-  const { slug } = await params;
+  if (!params?.slug) {
+    notFound();
+  }
+
+  const slug = decodeURIComponent(params.slug);
   const product = await getProductBySlug(slug);
 
   if (!product) {
@@ -34,16 +39,15 @@ export default async function ProductPage({
   }
 
   const [reviews, suggestedProducts] = await Promise.all([
-    getProductReviews(product._id),
-    getSuggestedProducts(slug, product.color[0]),
+    getProductReviews(product._id.toString()), // Ensure ID is string
+    getSuggestedProducts(slug, product.color?.[0] || ""), // Handle optional color
   ]);
 
   return (
     <main className="min-h-screen py-8">
-      <ProductDetail product={product} />
+      <ProductDetail product={JSON.parse(JSON.stringify(product))} />
       <div className="container mx-auto px-4">
-        <ProductDetail product={product} />
-        <ProductReviews productId={product._id} initialReviews={reviews} />
+        <ProductReviews productId={product._id.toString()} initialReviews={reviews} />
         <SuggestedProducts products={suggestedProducts} />
       </div>
     </main>

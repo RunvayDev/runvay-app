@@ -3,9 +3,8 @@
 import { useState } from "react";
 import Image from "next/image";
 import AddToCartButton from "@/components/AddToCartButton"; // Import the AddToCartButton
-import { Star, ShoppingCart } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
+import { Star} from "lucide-react";
+ import { Card, CardContent } from "@/components/ui/card";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Label } from "@/components/ui/label";
 import { Separator } from "@/components/ui/separator";
