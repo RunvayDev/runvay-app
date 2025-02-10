@@ -10,31 +10,39 @@ const orderSchema = new mongoose.Schema(
           ref: "Product",
           required: true,
         },
+        name: { type: String, required: true },
+        price: { type: Number, required: true },
+        size: { type: String },
+        color: { type: String },
         quantity: { type: Number, required: true },
       },
     ],
     totalAmount: { type: Number, required: true },
     status: {
       type: String,
-      enum: ["pending", "shipped", "delivered", "cancelled"],
+      enum: ["pending", "processing", "shipped", "delivered", "cancelled"],
       default: "pending",
     },
     shippingAddress: {
-      street: String,
-      city: String,
-      zip: String,
-      country: String,
+      street: { type: String, required: true },
+      city: { type: String, required: true },
+      zip: { type: String, required: true },
+      country: { type: String, required: true },
     },
-    paymentMethod: {
-      type: String,
-      enum: ["credit_card", "paypal", "cash_on_delivery"],
-      required: true,
+    paymentDetails: {
+      method: {
+        type: String,
+        enum: ["credit_card", "paypal", "cash_on_delivery"],
+        required: true,
+      },
+      status: {
+        type: String,
+        enum: ["paid", "pending", "failed"],
+        default: "pending",
+      },
+      transactionId: { type: String }, // Store transaction ID for online payments
     },
-    paymentStatus: {
-      type: String,
-      enum: ["paid", "pending", "failed"],
-      default: "pending",
-    },
+    trackingNumber: { type: String }, // Optional field for shipped orders
   },
   { timestamps: true },
 );
