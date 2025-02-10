@@ -4,6 +4,7 @@ import Credentials from "next-auth/providers/credentials";
 import { comparePassword } from "@/utils/password";
 import { connectToDataBase } from "@/lib/mongodb";
 import User from "@/models/User";
+import { createSessionForUser } from "@/utils/createSessionId";
 
 export const { handlers, signIn, signOut, auth } = NextAuth({
   providers: [
@@ -92,14 +93,14 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       session.user.email = token.email;
       session.user.name = token.name;
  
-      // Optionally add other custom fields (e.g., role, preferences)
-      return session;
+       return session;
     },
 
     async jwt({ token, user }: { token: any; user: any }) {
-      // Add user information to the JWT token
-      if (user) {
-        token.id = user.id;
+       if (user) {
+        const sessionId = await createSessionForUser(user.id);
+      //
+        token.id = sessionId;
         token.email = user.email;
         token.name = user.name;
        }

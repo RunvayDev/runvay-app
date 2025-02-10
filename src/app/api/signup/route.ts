@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { connectToDataBase } from "@/lib/mongodb";
 import User from "@/models/User";
+import Profile from "@/models/Profile";
 import { generateSalt, hashPassword } from "@/utils/password";
 
 export async function POST(req: Request) {
@@ -22,7 +23,7 @@ export async function POST(req: Request) {
       newUser = new User({
         email,
         name,
-        oauthProvider: "google", // Set oauthProvider to 'google'
+        oauthProvider: "google",
       });
       await newUser.save();
     } else {
@@ -34,12 +35,30 @@ export async function POST(req: Request) {
         name,
         salt,
         hashedPassword,
-        oauthProvider: "credentials", // Set oauthProvider to 'credentials'
+        oauthProvider: "credentials",
       });
       await newUser.save();
     }
 
-    return NextResponse.json({ message: "User created successfully", user: newUser }, { status: 201 });
+    // Create a corresponding Profile for the new user
+    const newProfile = new Profile({
+      user: newUser._id,
+      email: newUser.email,
+      phoneNumber: "", // Default empty phone number
+      shippingAddress: {
+        street: "",
+        city: "",
+        zip: "",
+        country: "",
+      },
+      orders: [], // Initialize with an empty order array
+    });
+    await newProfile.save();
+
+    return NextResponse.json(
+      { message: "User and Profile created successfully", user: newUser },
+      { status: 201 }
+    );
   } catch (error) {
     console.error(error);
     return NextResponse.json({ error: "Internal Server Error" }, { status: 500 });

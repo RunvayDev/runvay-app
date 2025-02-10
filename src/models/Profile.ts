@@ -16,7 +16,7 @@ interface Profile extends Document {
 const profileSchema = new mongoose.Schema({
   user: { type: mongoose.Schema.Types.ObjectId, ref: "User", required: true },
   email: { type: String },
-  phoneNumber: { type: String, required: true, default: "" },
+  phoneNumber: { type: String, default: "" },
   shippingAddress: {
     street: { type: String, default: "" },
     city: { type: String, default: "" },

@@ -1,11 +1,12 @@
 "use client";
 import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
+import { signOut } from "next-auth/react"; // Import NextAuth functions
 import Image from "next/image";
 import { Menu, X } from "lucide-react";
 import { useRouter } from "next/navigation";
 import ButtonComponent from "./ButtonComponent";
-import CartIcon from "@/components/CartIcon";
+import CartIcon from "@/components/CartIcon"; 
 import { useSession } from "next-auth/react"; // Import NextAuth functions
 
 interface Product {
@@ -184,7 +185,7 @@ const Navbar = ({ products }: NavbarProps) => {
                           </Link>
                         </li>
                         <li>
-                          <button className="block w-full text-left px-4 py-2 hover:bg-gray-100" onClick={() => alert("Logging out...")}>
+                          <button className="block w-full text-left px-4 py-2 hover:bg-gray-100" onClick={() => {signOut({ callbackUrl: "/" }); }}>
                             Logout
                           </button>
                         </li>

@@ -3,22 +3,27 @@ import connectMongo from "@/lib/mongoose";
 import Order from "@/models/Order";
 import Profile from "@/models/Profile";
 import User from "@/models/User";
+import Session from "@/models/Session"; // Assuming you have a Session model to validate sessionId
+import { auth } from "@/lib/auth";
 
+// Handle GET Request
 export async function GET(req: NextRequest) {
   try {
     await connectMongo();
 
-    const { searchParams } = new URL(req.url);
-    const name = searchParams.get("name");
+    const sessionFromCookie = await auth();
 
-    if (!name) {
+    if (!sessionFromCookie) {
       return NextResponse.json(
-        { error: "Name parameter is missing" },
-        { status: 400 },
+        { error: "SessionId header is missing" },
+        { status: 400 }
       );
     }
 
-    const user = await User.findOne({ name });
+    // Validate sessionId and fetch userId
+    const sessionId  = sessionFromCookie.user?.id;
+    const session = await Session.findOne({sessionId});
+     const user = await User.findById(session.userId);
     if (!user) {
       return NextResponse.json({ message: "User not found" }, { status: 404 });
     }
@@ -33,7 +38,7 @@ export async function GET(req: NextRequest) {
     if (!profile) {
       return NextResponse.json(
         { message: "Profile not found" },
-        { status: 404 },
+        { status: 404 }
       );
     }
 
@@ -47,28 +52,37 @@ export async function GET(req: NextRequest) {
     console.error("Profile fetch error:", error);
     return NextResponse.json(
       { message: "Failed to fetch profile" },
-      { status: 500 },
+      { status: 500 }
     );
   }
 }
 
+// Handle PUT Request
 export async function PUT(req: NextRequest) {
   try {
     await connectMongo();
-
-    const updateData = await req.json();
-    // Use a stable identifier from the client (e.g., userId)
-    const { userId, name, email, phoneNumber, shippingAddress } = updateData;
-
-    if (!userId) {
+    const sessionFromCookie = await auth();
+     const sessionId = sessionFromCookie?.user?.id;
+    if (!sessionId) {
       return NextResponse.json(
-        { message: "UserId is missing" },
-        { status: 400 },
+        { error: "SessionId header is missing" },
+        { status: 400 }
       );
     }
 
-    // Find the user using the stable identifier
-    const user = await User.findById(userId);
+    // Validate sessionId and fetch userId
+    const session = await Session.findOne({ sessionId });
+    if (!session) {
+      return NextResponse.json(
+        { message: "Invalid or expired sessionId" },
+        { status: 401 }
+      );
+    }
+
+    const updateData = await req.json();
+    const { name, email, phoneNumber, shippingAddress } = updateData;
+
+    const user = await User.findById(session.userId);
     if (!user) {
       return NextResponse.json({ message: "User not found" }, { status: 404 });
     }
@@ -81,7 +95,7 @@ export async function PUT(req: NextRequest) {
       if (existingUser && existingUser._id.toString() !== user._id.toString()) {
         return NextResponse.json(
           { message: "Email already in use" },
-          { status: 400 },
+          { status: 400 }
         );
       }
       user.email = email;
@@ -126,7 +140,7 @@ export async function PUT(req: NextRequest) {
     console.error("Profile update error:", error);
     return NextResponse.json(
       { message: "Failed to update profile" },
-      { status: 500 },
+      { status: 500 }
     );
   }
 }

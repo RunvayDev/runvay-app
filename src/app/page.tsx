@@ -2,11 +2,17 @@ import Carousel from "@/components/Carousel";
 import CardSection from "@/components/CardSection";
 import HeroSection from "@/components/HeroSection";
 import { getCachedProducts } from "@/lib/productCache";
-import { Product } from "@/types/Product"; 
+import { Product } from "@/types/product"; 
+import {auth} from "@/lib/auth";
 
 
+ 
 
 export default async function Home() {
+  const session = await auth();
+  const userid = session?.user?.id;
+  const username= session?.user?.name;
+
   const products: Product[] = await getCachedProducts();
 
   // Select only a few products to show (e.g., latest 5 products)
@@ -35,6 +41,7 @@ export default async function Home() {
   return (
     <>
       <Carousel />
+   
 
       {/* Featured Products Section */}
       <CardSection title="Trending Picks" products={featuredProducts} />
