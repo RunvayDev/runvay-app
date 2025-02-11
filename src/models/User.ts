@@ -8,8 +8,7 @@ interface User extends Document {
   oauthProvider?: string;
   createdAt: Date;
   updatedAt: Date;
-  cart: CartItem[]; // Add this line
-}
+ }
 
 const userSchema = new Schema<User>(
   {
@@ -22,7 +21,7 @@ const userSchema = new Schema<User>(
       enum: ["google", "credentials"],
       default: "credentials",
     },
-    cart: { type: Array, default: [] },
+    
   }, // Add this line
   { timestamps: true }
 );

@@ -10,7 +10,7 @@ import Footer from "@/components/Footer";
 interface Product {
   name: string;
   description?: string;
-  price: number;
+  price: number;  
   stock: number;
   size: string[];
   color: string[];

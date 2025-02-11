@@ -2,17 +2,44 @@ import mongoose, { Schema, Document } from "mongoose";
 
 export interface ISession extends Document {
   sessionId: string;
-  userId: string;
+  user: { type: mongoose.Schema.Types.ObjectId, ref: "User", required: true },
   expiresAt: Date;
 }
 
-const sessionSchema = new Schema<ISession>({
+const SessionSchema = new Schema<ISession>({
   sessionId: { type: String, required: true, unique: true },
-  userId: { type: String, required: true }, // Reference to the user's _id
+  user:   { type: mongoose.Schema.Types.ObjectId, ref: "User", required: true },
   expiresAt: { type: Date, required: true }, // Expiration timestamp
 });
 
 // Automatically expire sessions after a set period
-sessionSchema.index({ expiresAt: 1 }, { expireAfterSeconds: 0 });
+SessionSchema.index({ expiresAt: 1 }, { expireAfterSeconds: 0 });
 
-export default mongoose.models.Session || mongoose.model<ISession>("Session", sessionSchema);
+
+
+SessionSchema.statics.createOrUpdateSession = async function(userId, sessionId) {
+  try {
+    // Try to find and update existing session
+    let session = await this.findOne({ user: userId });
+
+    if (session) {
+      session.sessionId = sessionId;
+      session.expiresAt = new Date(+new Date() + 7*24*60*60*1000);
+      await session.save();
+    } else {
+      // Create new session if not exists
+      session = await this.create({
+        sessionId,
+        user: userId,
+      });
+    }
+
+    return session;
+  } catch (error) {
+    console.error('Session creation error:', error);
+    throw error;
+  }
+};
+
+
+export default mongoose.models.Session || mongoose.model<ISession>("Session", SessionSchema);

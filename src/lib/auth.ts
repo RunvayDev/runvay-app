@@ -4,8 +4,8 @@ import Credentials from "next-auth/providers/credentials";
 import { comparePassword } from "@/utils/password";
 import { connectToDataBase } from "@/lib/mongodb";
 import User from "@/models/User";
-import { createSessionForUser } from "@/utils/createSessionId";
-
+import Profile from "@/models/Profile";
+ 
 export const { handlers, signIn, signOut, auth } = NextAuth({
   providers: [
     Google({
@@ -21,6 +21,20 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
             email: profile.email,
             oauthProvider: "google",
           });
+
+          await Profile.create({
+            user: user._id,
+            email: user.email,
+            phoneNumber: "",
+            shippingAddress: {
+              street: "",
+              city: "",
+              zip: "",
+              country: "",
+            },
+            orders: [],
+          });
+        
         } else if (user.oauthProvider !== "google") {
           // If the user exists but was created using credentials, update oauthProvider
           user.oauthProvider = "google";
@@ -87,26 +101,28 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
   },
 
   callbacks: {
-    async session({ session, token }: { session: any; token: any }) {
-      // Add custom fields to the session object
-      session.user.id = token.id;
-      session.user.email = token.email;
-      session.user.name = token.name;
- 
-       return session;
-    },
-
     async jwt({ token, user }: { token: any; user: any }) {
        if (user) {
-        const sessionId = await createSessionForUser(user.id);
-      //
-        token.id = sessionId;
-        token.email = user.email;
+         console.log("User", user);
+        token.id = user._id;
+         token.email = user.email;
         token.name = user.name;
        }
 
       return token;
     },
+    async session({ session, token }: { session: any; token: any }) {
+    
+      if(token){
+
+        session.user.id = token.id;
+         session.user.email = token.email;
+        session.user.name = token.name;
+        
+      }
+        return session;
+    },
+
   },
 
   session: {
