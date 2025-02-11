@@ -47,7 +47,10 @@ export default async function ProductPage({
     <main className="min-h-screen py-8">
       <ProductDetail product={JSON.parse(JSON.stringify(product))} />
       <div className="container mx-auto px-4">
-        <ProductReviews productId={product._id.toString()} initialReviews={reviews} />
+        <ProductReviews
+          productId={product._id.toString()}
+          initialReviews={reviews}
+        />
         <SuggestedProducts products={suggestedProducts} />
       </div>
     </main>
