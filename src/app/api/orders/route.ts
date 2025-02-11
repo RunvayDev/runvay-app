@@ -1,25 +1,15 @@
 import { NextResponse } from "next/server";
 import connectMongo from "@/lib/mongoose";
 import Order from "@/models/Order";
-import Session from "@/models/Session";
-import { auth } from "@/lib/auth";
+ import { auth } from "@/lib/auth";
 import User from "@/models/User";
 
 export async function GET() {
   try {
     await connectMongo();
 
-    const sessionFromCookie = await auth();
-
-    if (!sessionFromCookie) {
-      return NextResponse.json(
-        { error: "SessionId header is missing" },
-        { status: 400 },
-      );
-    }
-
-    const sessionId = sessionFromCookie.user?.id;
-    const session = await Session.findOne({ sessionId });
+    const session = await auth();
+  
     if (!session) {
       return NextResponse.json(
         { message: "Invalid or expired session" },
@@ -27,7 +17,7 @@ export async function GET() {
       );
     }
     // console.log(session.userId);
-    const user = await User.findById(session.userId);
+    const user = await User.findById(session?.user?.email);
     if (!user) {
       return NextResponse.json({ message: "User not found" }, { status: 404 });
     }
