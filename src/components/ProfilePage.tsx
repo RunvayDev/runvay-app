@@ -129,7 +129,7 @@ const ProfilePage: React.FC = () => {
   };
 
   if (loading && !profile) {
-    return null;
+    return;
   }
 
   if (error) {

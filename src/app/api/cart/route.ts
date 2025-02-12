@@ -1,12 +1,12 @@
 // app/api/cart/route.ts
-import  connectMongo  from '@/lib/mongoose';
+import  {connectToDb} from '@/lib/mongodb';
  import { NextResponse } from 'next/server';
  import { auth} from "@/lib/auth";
  import Cart from '@/models/Cart';
  import User from '@/models/User';
 
 export async function GET() {
-  await connectMongo();
+  await connectToDb();
   const session = await auth();
   if (!session?.user?.email) return NextResponse.json([]);
   
@@ -15,7 +15,7 @@ export async function GET() {
 }
 
 export async function POST(request: Request) {
-  await connectMongo();
+  await connectToDb();
   const session = await auth();
   const { cartItems } = await request.json();
   

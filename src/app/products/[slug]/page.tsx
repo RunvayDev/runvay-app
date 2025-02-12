@@ -1,4 +1,4 @@
-import { getProductBySlug, getAllProducts } from "@/lib/mongoose";
+import { getProductBySlug, getAllProducts } from "@/lib/mongodb";
 import { notFound } from "next/navigation";
 import ProductDetail from "@/components/ProductDetail";
 import ProductReviews from "@/components/ProductReviews";

@@ -1,12 +1,12 @@
 import { NextResponse } from "next/server";
-import connectMongo from "@/lib/mongoose";
+import {connectToDb }from "@/lib/mongodb";
 import Order from "@/models/Order";
 import { auth } from "@/lib/auth";
 import User from "@/models/User";
 
 export async function GET() {
   try {
-    await connectMongo();
+    await connectToDb();
 
     const session = await auth();
 

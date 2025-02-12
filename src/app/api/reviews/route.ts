@@ -1,11 +1,11 @@
 // app/api/reviews/route.ts
 import { NextResponse } from "next/server";
-import connectMongo from "@/lib/mongoose";
+import {connectToDb} from "@/lib/mongodb";
 import Review from "@/models/Review";
 
 export async function POST(request: Request) {
   try {
-    await connectMongo();
+    await connectToDb();
     const body = await request.json();
     const review = await Review.create(body);
     return NextResponse.json(review, { status: 201 });
@@ -21,7 +21,7 @@ export async function POST(request: Request) {
 export async function GET(request: Request) {
   // Add GET handler
   try {
-    await connectMongo();
+    await connectToDb();
 
     const { searchParams } = new URL(request.url);
     const productId = searchParams.get("productId");

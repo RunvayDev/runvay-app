@@ -1,5 +1,5 @@
-import { getAllProducts } from "@/lib/mongoose";
-import { Product } from "@/types/Product";
+import { getAllProducts } from "@/lib/mongodb";
+import { Product } from "@/types/product";
 
 // Global variables for caching
 let cachedProducts: Product[] | null = null;

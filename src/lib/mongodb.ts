@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+import Product from "@/models/Product";
 
 const MONGO_URI = process.env.MONGO_URI!;
 
@@ -11,7 +12,7 @@ let cached = global.mongoose;
 if (!cached) 
   cached = global.mongoose = { conn: null, promise: null };
 
-export async function connectToDataBase() {
+export async function connectToDb() {
   if (cached.conn) {
     return cached.conn;
   }
@@ -33,4 +34,14 @@ export async function connectToDataBase() {
    }
 }
 
- 
+export async function getAllProducts() {
+  await connectToDb();
+  const products = await Product.find({}).lean();
+  return products;
+}
+
+export async function getProductBySlug(slug: string) {
+  await connectToDb();
+  const product = await Product.findOne({ slug }); // Find product by slug
+  return product;
+}

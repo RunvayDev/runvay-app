@@ -1,9 +1,9 @@
 import { NextResponse, NextRequest } from "next/server";
 import Product from "@/models/Product";
-import connectMongo from "@/lib/mongoose";
+import {connectToDb } from "@/lib/mongodb";
 
 export async function POST(req: NextRequest) {
-  await connectMongo();
+  await connectToDb();
 
   const { text } = await req.json();
 

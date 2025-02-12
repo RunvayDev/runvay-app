@@ -68,7 +68,7 @@ export default function OrdersList() {
     fetchOrders();
   }, []);
 
-  if (isLoading) return <p>Loading orders...</p>;
+  if (isLoading) return;
   if (error) return <p className="text-red-500">{error}</p>;
 
   return (

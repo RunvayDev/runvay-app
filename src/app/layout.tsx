@@ -39,11 +39,13 @@ export default async function RootLayout({ children }: { children: ReactNode }) 
   
   return (
     <html lang="en">
-        <body>
+        <body className="flex flex-col">
         <SessionProvider>
         <CartProvider>
           <Navbar products={products}/>
+        <main className="flex-grow min-h-screen">  
           {children}
+        </main>
           <Footer />
         </CartProvider>
     </SessionProvider>

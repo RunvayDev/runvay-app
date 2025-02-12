@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { connectToDataBase } from "@/lib/mongodb";
+import { connectToDb } from "@/lib/mongodb";
 import User from "@/models/User";
 import Profile from "@/models/Profile";
 import { generateSalt, hashPassword } from "@/utils/password";
@@ -8,7 +8,7 @@ export async function POST(req: Request) {
   try {
     const { email, password, name, oauthProvider } = await req.json();
 
-    await connectToDataBase();
+    await connectToDb();
 
     // Check if the user already exists
     const existingUser = await User.findOne({ email });

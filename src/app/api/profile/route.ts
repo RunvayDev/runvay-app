@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import connectMongo from "@/lib/mongoose";
+import {connectToDb} from "@/lib/mongodb";
 import Order from "@/models/Order";
 import Profile from "@/models/Profile";
 import User from "@/models/User";
@@ -8,7 +8,7 @@ import { auth } from "@/lib/auth";
 // Handle GET Request
 export async function GET() {
   try {
-    await connectMongo();
+    await connectToDb();
 
     const session = await auth();
 
@@ -56,7 +56,7 @@ export async function GET() {
 // Handle PUT Request
 export async function PUT(req: NextRequest) {
   try {
-    await connectMongo();
+    await connectToDb();
     const session = await auth();
 
 
