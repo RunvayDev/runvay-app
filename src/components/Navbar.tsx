@@ -3,10 +3,9 @@ import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 import { signOut } from "next-auth/react"; // Import NextAuth functions
 import Image from "next/image";
-import { Menu, X } from "lucide-react";
+import { Menu, X, User } from "lucide-react";
 import { useRouter } from "next/navigation";
-import ButtonComponent from "./ButtonComponent";
-import CartIcon from "@/components/CartIcon";
+ import CartIcon from "@/components/CartIcon";
 import { useSession } from "next-auth/react"; // Import NextAuth functions
 
 interface Product {
@@ -72,7 +71,7 @@ const Navbar = ({ products }: NavbarProps) => {
 
     if (query.length > 0) {
       const filtered = products.filter((product) =>
-        product.name.toLowerCase().includes(query.toLowerCase()),
+        product.name.toLowerCase().includes(query.toLowerCase())
       );
       setSuggestions(filtered);
       setShowSuggestions(true);
@@ -89,7 +88,7 @@ const Navbar = ({ products }: NavbarProps) => {
 
   return (
     <header className="bg-white shadow-md p-4">
-      <div className="flex justify-between items-center">
+      <div className="flex justify-between items-center ">
         <div className="text-xl font-bold">
           <Link
             href="/"
@@ -109,7 +108,11 @@ const Navbar = ({ products }: NavbarProps) => {
         </div>
 
         <nav
-          className={`${isMenuOpen ? "flex flex-col absolute top-16 left-0 right-0 bg-white p-4 shadow-md z-10" : "hidden"} lg:flex lg:items-center lg:space-x-4 lg:static lg:shadow-none lg:p-0`}
+          className={`${
+            isMenuOpen
+              ? "flex flex-col absolute top-16 left-0 right-0 bg-white p-4 shadow-md z-10"
+              : "hidden"
+          } lg:flex lg:items-center lg:space-x-4 lg:static lg:shadow-none lg:p-0`}
         >
           <ul className="flex flex-col lg:flex-row space-y-4 lg:space-y-0 lg:space-x-4">
             {/* Other menu items */}
@@ -200,10 +203,9 @@ const Navbar = ({ products }: NavbarProps) => {
                 </div>
               )}
             </div>
-              <div className="mr-1">
-
-            <CartIcon />
-              </div>
+            <div className="pr-1">
+              <CartIcon />
+            </div>
 
             <div className="relative" ref={profileRef}>
               {session ? (
@@ -212,12 +214,7 @@ const Navbar = ({ products }: NavbarProps) => {
                     onClick={() => setShowProfileMenu(!showProfileMenu)}
                     className="border border-black rounded-full p-1 flex items-center"
                   >
-                    <Image
-                      src="/profile.svg"
-                      width={30}
-                      height={30}
-                      alt="profile"
-                    />
+                    <User className="w-6 h-6 text-gray-700" />
                   </button>
 
                   {showProfileMenu && (
@@ -254,15 +251,13 @@ const Navbar = ({ products }: NavbarProps) => {
                   )}
                 </>
               ) : (
-                <div className="border-2 border-black rounded-lg">
-                  <ButtonComponent
-                    ButtonName="Sign Up / Login"
-                    TextColor="text-black"
-                    ButtonColor1="bg-transparent-500"
-                    ButtonColor2="hover:bg-gray-200"
-                    width="w-35"
+                <div className="border-2 border-black  p-1 rounded-lg">
+                  <button
+                    className="flex items-center p-1"
                     onClick={() => router.push("/signin")}
-                  />
+                  >
+                    Sign Up / Login
+                  </button>
                 </div>
               )}
             </div>

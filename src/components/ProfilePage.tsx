@@ -154,32 +154,34 @@ const ProfilePage: React.FC = () => {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      <div className="max-w-4xl mx-auto p-6">
-        {/* Profile Header */}
-        <div className="mb-8 text-center">
-          <div className="w-24 h-24 mx-auto mb-4 rounded-full bg-gray-200 flex items-center justify-center">
-            <User className="w-12 h-12 text-gray-600" />
+      <div className="max-w-4xl mx-auto p-6 space-y-8">
+        {/* Profile Header with subtle animation */}
+        <div className="mb-8 text-center animate-fade-in">
+          <div className="w-32 h-32 mx-auto mb-4 rounded-full bg-gradient-to-br from-gray-100 to-gray-200 flex items-center justify-center shadow-lg">
+            <User className="w-16 h-16 text-gray-700" />
           </div>
-          <h1 className="text-3xl font-bold">{profile.name}</h1>
-          <p className="text-gray-600">{profile.email}</p>
+          <h1 className="text-4xl font-bold tracking-tight mb-2">{profile.name}</h1>
+          <p className="text-gray-600 font-medium">{profile.email}</p>
         </div>
 
         {updateMessage && (
           <Alert
             variant={updateMessage.type === "success" ? "default" : "destructive"}
-            className="mb-6"
+            className="rounded-lg shadow-sm"
           >
-            <AlertDescription>{updateMessage.message}</AlertDescription>
+            <AlertDescription className="font-medium">
+              {updateMessage.message}
+            </AlertDescription>
           </Alert>
         )}
 
-        <form onSubmit={handleSubmit} className="space-y-6">
+        <form onSubmit={handleSubmit} className="space-y-8">
           {/* Personal Information Card */}
-          <Card className="border-0 shadow-lg">
-            <CardHeader className="border-b bg-gray-50">
+          <Card className="shadow-xl rounded-xl border border-gray-100">
+            <CardHeader className="bg-gray-50 border-b border-gray-200 py-4">
               <div className="flex items-center justify-between">
-                <CardTitle className="flex items-center gap-2">
-                  <User className="w-5 h-5" />
+                <CardTitle className="flex items-center gap-3 text-xl">
+                  <User className="w-6 h-6" />
                   Personal Information
                 </CardTitle>
                 {!isEditing && (
@@ -188,18 +190,19 @@ const ProfilePage: React.FC = () => {
                     variant="ghost"
                     size="sm"
                     onClick={() => setIsEditing(true)}
-                    className="text-gray-600 hover:text-gray-900"
+                    className="text-gray-600 hover:bg-gray-100 rounded-lg"
                   >
                     <Edit2 className="w-4 h-4 mr-2" />
-                    Edit
+                    Edit Profile
                   </Button>
                 )}
               </div>
             </CardHeader>
-            <CardContent className="space-y-4 p-6">
+            <CardContent className="p-8 space-y-6">
               <div className="grid md:grid-cols-2 gap-6">
-                <div className="space-y-2">
-                  <label htmlFor="name" className="text-sm font-medium flex items-center gap-2">
+                {/* Input Fields with enhanced focus states */}
+                <div className="space-y-3">
+                  <label htmlFor="name" className="text-sm font-medium flex items-center gap-2 text-gray-700">
                     <User className="w-4 h-4" /> Name
                   </label>
                   <Input
@@ -209,11 +212,11 @@ const ProfilePage: React.FC = () => {
                     value={editedProfile.name || ""}
                     onChange={handleInputChange}
                     disabled={!isEditing}
-                    className="border-gray-200 focus:ring-black"
+                    className="border-gray-300 focus:ring-2 focus:ring-gray-900 focus:border-gray-900 h-11 rounded-lg"
                   />
                 </div>
-                <div className="space-y-2">
-                  <label htmlFor="email" className="text-sm font-medium flex items-center gap-2">
+                <div className="space-y-3">
+                  <label htmlFor="email" className="text-sm font-medium flex items-center gap-2 text-gray-700">
                     <Mail className="w-4 h-4" /> Email
                   </label>
                   <Input
@@ -224,11 +227,11 @@ const ProfilePage: React.FC = () => {
                     value={editedProfile.email || ""}
                     onChange={handleInputChange}
                     disabled={!isEditing}
-                    className="border-gray-200 focus:ring-black"
+                    className="border-gray-300 focus:ring-2 focus:ring-gray-900 focus:border-gray-900 h-11 rounded-lg"
                   />
                 </div>
-                <div className="space-y-2">
-                  <label htmlFor="phoneNumber" className="text-sm font-medium flex items-center gap-2">
+                <div className="space-y-3">
+                  <label htmlFor="phoneNumber" className="text-sm font-medium flex items-center gap-2 text-gray-700">
                     <Phone className="w-4 h-4" /> Phone Number
                   </label>
                   <Input
@@ -238,25 +241,25 @@ const ProfilePage: React.FC = () => {
                     value={editedProfile.phoneNumber || ""}
                     onChange={handleInputChange}
                     disabled={!isEditing}
-                    className="border-gray-200 focus:ring-black"
+                    className="border-gray-300 focus:ring-2 focus:ring-gray-900 focus:border-gray-900 h-11 rounded-lg"
                   />
                 </div>
               </div>
             </CardContent>
           </Card>
 
-          {/* Shipping Address Card */}
-          <Card className="border-0 shadow-lg">
-            <CardHeader className="border-b bg-gray-50">
-              <CardTitle className="flex items-center gap-2">
-                <MapPin className="w-5 h-5" />
+          {/* Shipping Address Card with improved grid */}
+          <Card className="shadow-xl rounded-xl border border-gray-100">
+            <CardHeader className="bg-gray-50 border-b border-gray-200 py-4">
+              <CardTitle className="flex items-center gap-3 text-xl">
+                <MapPin className="w-6 h-6" />
                 Shipping Address
               </CardTitle>
             </CardHeader>
-            <CardContent className="space-y-4 p-6">
+            <CardContent className="p-8 space-y-6">
               <div className="grid md:grid-cols-2 gap-6">
-                <div className="space-y-2">
-                  <label htmlFor="street" className="text-sm font-medium">Street</label>
+                <div className="space-y-3">
+                  <label htmlFor="street" className="text-sm font-medium text-gray-700">Street</label>
                   <Input
                     id="street"
                     name="shipping.street"
@@ -264,11 +267,11 @@ const ProfilePage: React.FC = () => {
                     value={editedProfile.shippingAddress?.street || ""}
                     onChange={handleInputChange}
                     disabled={!isEditing}
-                    className="border-gray-200 focus:ring-black"
+                    className="border-gray-300 focus:ring-2 focus:ring-gray-900 focus:border-gray-900 h-11 rounded-lg"
                   />
                 </div>
-                <div className="space-y-2">
-                  <label htmlFor="city" className="text-sm font-medium">City</label>
+                <div className="space-y-3">
+                  <label htmlFor="city" className="text-sm font-medium text-gray-700">City</label>
                   <Input
                     id="city"
                     name="shipping.city"
@@ -276,23 +279,23 @@ const ProfilePage: React.FC = () => {
                     value={editedProfile.shippingAddress?.city || ""}
                     onChange={handleInputChange}
                     disabled={!isEditing}
-                    className="border-gray-200 focus:ring-black"
+                    className="border-gray-300 focus:ring-2 focus:ring-gray-900 focus:border-gray-900 h-11 rounded-lg"
                   />
                 </div>
-                <div className="space-y-2">
-                  <label htmlFor="zip" className="text-sm font-medium">ZIP Code</label>
+                <div className="space-y-3">
+                  <label htmlFor="zip" className="text-sm font-medium text-gray-700">ZIP Code</label>
                   <Input
                     id="zip"
-                    name="Pincode"
+                    name="shipping.zip"  // Fixed the name attribute
                     placeholder="123456"
                     value={editedProfile.shippingAddress?.zip || ""}
                     onChange={handleInputChange}
                     disabled={!isEditing}
-                    className="border-gray-200 focus:ring-black"
+                    className="border-gray-300 focus:ring-2 focus:ring-gray-900 focus:border-gray-900 h-11 rounded-lg"
                   />
                 </div>
-                <div className="space-y-2">
-                  <label htmlFor="country" className="text-sm font-medium">Country</label>
+                <div className="space-y-3">
+                  <label htmlFor="country" className="text-sm font-medium text-gray-700">Country</label>
                   <Input
                     id="country"
                     name="shipping.country"
@@ -300,19 +303,19 @@ const ProfilePage: React.FC = () => {
                     value={editedProfile.shippingAddress?.country || ""}
                     onChange={handleInputChange}
                     disabled={!isEditing}
-                    className="border-gray-200 focus:ring-black"
+                    className="border-gray-300 focus:ring-2 focus:ring-gray-900 focus:border-gray-900 h-11 rounded-lg"
                   />
                 </div>
               </div>
             </CardContent>
           </Card>
 
-          {/* Orders Section */}
+          {/* Orders Section with enhanced hover states */}
           {profile.orders && profile.orders.length > 0 && (
-            <Card className="border-0 shadow-lg">
-              <CardHeader className="border-b bg-gray-50">
-                <CardTitle className="flex items-center gap-2">
-                  <Package className="w-5 h-5" />
+            <Card className="shadow-xl rounded-xl border border-gray-100">
+              <CardHeader className="bg-gray-50 border-b border-gray-200 py-4">
+                <CardTitle className="flex items-center gap-3 text-xl">
+                  <Package className="w-6 h-6" />
                   Order History
                 </CardTitle>
               </CardHeader>
@@ -321,14 +324,16 @@ const ProfilePage: React.FC = () => {
                   {profile.orders.map((order) => (
                     <div
                       key={order._id}
-                      className="p-4 rounded-lg border border-gray-100 hover:border-gray-200 transition-colors duration-200"
+                      className="p-4 rounded-lg border border-gray-200 hover:shadow-md transition-shadow duration-200 group"
                     >
                       <div className="flex justify-between items-center">
                         <div>
-                          <p className="font-medium">Order #{order._id}</p>
-                          <p className="text-sm text-gray-600">{order.item}</p>
+                          <p className="font-medium text-gray-900 group-hover:text-black">
+                            Order #{order._id.slice(-6).toUpperCase()}
+                          </p>
+                          <p className="text-sm text-gray-600 mt-1">{order.item}</p>
                         </div>
-                        <p className="font-medium text-lg">
+                        <p className="font-medium text-lg text-gray-900">
                           ${order.totalAmount.toFixed(2)}
                         </p>
                       </div>
@@ -339,9 +344,9 @@ const ProfilePage: React.FC = () => {
             </Card>
           )}
 
-          {/* Action Buttons */}
+          {/* Enhanced Action Buttons */}
           {isEditing && (
-            <div className="flex justify-end gap-4">
+            <div className="flex justify-end gap-4 pt-6 border-t border-gray-200">
               <Button
                 type="button"
                 variant="outline"
@@ -349,14 +354,14 @@ const ProfilePage: React.FC = () => {
                   setIsEditing(false);
                   setEditedProfile(profile);
                 }}
-                className="border-gray-200 hover:bg-gray-50"
+                className="h-11 px-8 rounded-lg border-gray-300 hover:bg-gray-50 hover:border-gray-400"
               >
-                Cancel
+                Discard Changes
               </Button>
               <Button
                 type="submit"
                 disabled={loading}
-                className="bg-black hover:bg-gray-900 text-white"
+                className="h-11 px-8 rounded-lg bg-gray-900 hover:bg-gray-800 text-white focus:ring-2 focus:ring-gray-900 focus:ring-offset-2"
               >
                 {loading ? (
                   <>

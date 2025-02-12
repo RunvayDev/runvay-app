@@ -20,7 +20,7 @@ interface CardSectionProps {
 const CardSection = ({ title, products }: CardSectionProps) => {
   return (
     <section className="bg-white my-8">
-      <div className="container mx-auto px-4">
+      <div className="container mx-auto px-4 ">
         <h2 className="text-2xl font-bold text-gray-900 mb-6 text-center py-4">
           {title}
         </h2>

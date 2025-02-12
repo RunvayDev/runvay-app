@@ -2,9 +2,10 @@
 import { useRouter } from "next/navigation";
 import { signIn } from "next-auth/react";
 import { FcGoogle } from "react-icons/fc";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Alert, AlertDescription } from "@/components/ui/alert";
-import { X } from "lucide-react";
+import { X, Lock, Mail, User, EyeOff, Eye } from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
 
 export default function AuthForm() {
   const router = useRouter();
@@ -15,6 +16,9 @@ export default function AuthForm() {
   const [confirmPassword, setConfirmPassword] = useState("");
   const [errors, setErrors] = useState<{ [key: string]: string }>({});
   const [alert, setAlert] = useState<{ type: 'error' | 'success', message: string } | null>(null);
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   // Password validation helper
   const validatePassword = (password: string) => {
@@ -44,19 +48,16 @@ export default function AuthForm() {
   const validateForm = () => {
     const newErrors: { [key: string]: string } = {};
 
-    // Name validation
     if (isSignUp && name.trim().length < 2) {
       newErrors.name = "Name must be at least 2 characters long";
     }
 
-    // Email validation
     if (!email) {
       newErrors.email = "Email is required";
     } else if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i.test(email)) {
       newErrors.email = "Please enter a valid email address";
     }
 
-    // Password validation
     if (!password) {
       newErrors.password = "Password is required";
     } else if (isSignUp) {
@@ -66,7 +67,6 @@ export default function AuthForm() {
       }
     }
 
-    // Confirm password validation
     if (isSignUp && password !== confirmPassword) {
       newErrors.confirmPassword = "Passwords do not match";
     }
@@ -75,7 +75,6 @@ export default function AuthForm() {
     return Object.keys(newErrors).length === 0;
   };
 
-  // Password strength indicator
   const getPasswordStrength = (password: string) => {
     if (!password) return { strength: 0, label: "" };
     
@@ -104,6 +103,8 @@ export default function AuthForm() {
     if (!validateForm()) {
       return;
     }
+
+    setIsLoading(true);
 
     try {
       if (isSignUp) {
@@ -140,238 +141,306 @@ export default function AuthForm() {
       }
     } catch (error) {
       showAlert('error', "An unexpected error occurred. Please try again.");
+    } finally {
+      setIsLoading(false);
     }
   };
 
   const handleGoogleSignIn = async () => {
-    await signIn("google", { callbackUrl: "/" });
+    setIsLoading(true);
+    try {
+      await signIn("google", { callbackUrl: "/" });
+    } catch (error) {
+      showAlert('error', "Google sign-in failed. Please try again.");
+    } finally {
+      setIsLoading(false);
+    }
   };
 
+  
   return (
-    <div className="flex justify-center items-center min-h-screen   bg-gray-100">
-      <div className="w-96 bg-white p-6 rounded-lg shadow-lg relative">
-        {/* Alert Component */}
-        {alert && (
-          <div className={`absolute top-0 left-0 right-0 -mt-16  w-full max-w-sm`}>
-            <Alert className={`${alert.type === 'error' ? 'border-red-500 bg-red-50' : 'border-green-500 bg-green-50'}`}>
-              <AlertDescription className="flex justify-between items-center">
-                <span>{alert.message}</span>
-                <button onClick={() => setAlert(null)} className="ml-2">
-                  <X size={16} />
-                </button>
-              </AlertDescription>
-            </Alert>
-          </div>
-        )}
-
-        <div className="flex justify-center mb-4">
-          <img src="/runvay(logo).jpg" alt="Logo" className="h-12 w-auto" />
-        </div>
-
-        <div className="flex border-b-2 border-gray-200 pb-2 mb-4 relative">
-          <div
-            className="absolute bottom-0 h-0.5 bg-black transition-all duration-300 ease-in-out"
-            style={{
-              width: '50%',
-              transform: `translateX(${isSignUp ? '100%' : '0%'})`
-            }}
-          />
-          <button
-            onClick={() => {
-              setIsSignUp(false);
-              setErrors({});
-              setAlert(null);
-            }}
-            className={`w-1/2 transition-colors duration-300 text-lg ${
-              !isSignUp ? "font-semibold text-black" : "text-gray-400"
-            }`}
-          >
-            Sign In
-          </button>
-          <button
-            onClick={() => {
-              setIsSignUp(true);
-              setErrors({});
-              setAlert(null);
-            }}
-            className={`w-1/2 transition-colors duration-300 text-lg ${
-              isSignUp ? "font-semibold text-black" : "text-gray-400"
-            }`}
-          >
-            Sign Up
-          </button>
-        </div>
-
-        <form onSubmit={handleSubmit} className="space-y-4">
-          {isSignUp && (
-            <div>
-              <label className="block">
-                <span className="text-gray-700 text-sm font-medium mb-1 block">Name</span>
-                <input
-                  type="text"
-                  value={name}
-                  onChange={(e) => {
-                    setName(e.target.value);
-                    if (errors.name) {
-                      const newErrors = { ...errors };
-                      delete newErrors.name;
-                      setErrors(newErrors);
-                    }
-                  }}
-                  className={`w-full p-2.5 border-2 ${
-                    errors.name ? 'border-red-500' : 'border-gray-200'
-                  } rounded-md focus:border-black focus:outline-none transition-colors duration-200`}
-                  required
-                />
-                {errors.name && (
-                  <p className="text-red-500 text-xs mt-1">{errors.name}</p>
-                )}
-              </label>
-            </div>
-          )}
-
-          <div>
-            <label className="block">
-              <span className="text-gray-700 text-sm font-medium mb-1 block">Email</span>
-              <input
-                type="email"
-                value={email}
-                onChange={(e) => {
-                  setEmail(e.target.value);
-                  if (errors.email) {
-                    const newErrors = { ...errors };
-                    delete newErrors.email;
-                    setErrors(newErrors);
-                  }
-                }}
-                className={`w-full p-2.5 border-2 ${
-                  errors.email ? 'border-red-500' : 'border-gray-200'
-                } rounded-md focus:border-black focus:outline-none transition-colors duration-200`}
-                required
-              />
-              {errors.email && (
-                <p className="text-red-500 text-xs mt-1">{errors.email}</p>
-              )}
-            </label>
+    <div className="min-h-screen bg-gray-50 flex items-center justify-center p-4">
+      <motion.div 
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        className="w-full max-w-md"
+      >
+        <div className="bg-white rounded-xl shadow-lg overflow-hidden border border-gray-100">
+          <div className="relative h-32 bg-black flex items-center justify-center">
+            <motion.div
+              initial={{ scale: 0.5 }}
+              animate={{ scale: 1 }}
+              transition={{ type: "spring", stiffness: 260, damping: 20 }}
+              className="relative z-10 text-white text-center"
+            >
+              <h1 className="text-3xl font-bold tracking-tight">Welcome Back</h1>
+              <p className="mt-2 text-gray-400">{isSignUp ? "Create your account" : "Sign in to continue"}</p>
+            </motion.div>
           </div>
 
-          <div>
-            <label className="block">
-              <span className="text-gray-700 text-sm font-medium mb-1 block">Password</span>
-              <input
-                type="password"
-                value={password}
-                onChange={(e) => {
-                  setPassword(e.target.value);
-                  if (errors.password) {
-                    const newErrors = { ...errors };
-                    delete newErrors.password;
-                    setErrors(newErrors);
-                  }
-                }}
-                className={`w-full p-2.5 border-2 ${
-                  errors.password ? 'border-red-500' : 'border-gray-200'
-                } rounded-md focus:border-black focus:outline-none transition-colors duration-200`}
-                required
-              />
-              {isSignUp && password && (
-                <div className="mt-1">
-                  <div className="flex gap-1 mb-1">
-                    {[...Array(5)].map((_, index) => (
-                      <div
-                        key={index}
-                        className={`h-1 flex-1 rounded-full ${
-                          index < getPasswordStrength(password).strength
-                            ? 'bg-black'
-                            : 'bg-gray-200'
-                        }`}
-                      />
-                    ))}
-                  </div>
-                  <p className={`text-xs ${
-                    getPasswordStrength(password).strength >= 4 
-                      ? 'text-green-600' 
-                      : 'text-gray-500'
+          <div className="p-8">
+            {/* Alert Component */}
+            <AnimatePresence>
+              {alert && (
+                <motion.div
+                  initial={{ opacity: 0, y: -20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -20 }}
+                  className="mb-4"
+                >
+                  <Alert className={`${
+                    alert.type === 'error' ? 'border-red-500 bg-red-50' : 'border-green-500 bg-green-50'
                   }`}>
-                    {getPasswordStrength(password).label}
-                  </p>
-                </div>
+                    <AlertDescription className="flex justify-between items-center">
+                      <span>{alert.message}</span>
+                      <button onClick={() => setAlert(null)}>
+                        <X size={16} />
+                      </button>
+                    </AlertDescription>
+                  </Alert>
+                </motion.div>
               )}
-              {errors.password && (
-                <p className="text-red-500 text-xs mt-1">{errors.password}</p>
-              )}
-            </label>
-          </div>
+            </AnimatePresence>
 
-          {isSignUp && (
-            <div>
-              <label className="block">
-                <span className="text-gray-700 text-sm font-medium mb-1 block">Confirm Password</span>
-                <input
-                  type="password"
-                  value={confirmPassword}
-                  onChange={(e) => {
-                    setConfirmPassword(e.target.value);
-                    if (errors.confirmPassword) {
-                      const newErrors = { ...errors };
-                      delete newErrors.confirmPassword;
-                      setErrors(newErrors);
-                    }
-                  }}
-                  className={`w-full p-2.5 border-2 ${
-                    errors.confirmPassword ? 'border-red-500' : 'border-gray-200'
-                  } rounded-md focus:border-black focus:outline-none transition-colors duration-200`}
-                  required
-                />
-                {errors.confirmPassword && (
-                  <p className="text-red-500 text-xs mt-1">{errors.confirmPassword}</p>
+            <form onSubmit={handleSubmit} className="space-y-6">
+              <AnimatePresence mode="wait">
+                {isSignUp && (
+                  <motion.div
+                    initial={{ opacity: 0, height: 0 }}
+                    animate={{ opacity: 1, height: "auto" }}
+                    exit={{ opacity: 0, height: 0 }}
+                    transition={{ duration: 0.2 }}
+                  >
+                    <div className="relative">
+                      <label className="block text-sm font-medium text-gray-700 mb-1">Name</label>
+                      <div className="relative">
+                        <User className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={18} />
+                        <input
+                          type="text"
+                          value={name}
+                          onChange={(e) => {
+                            setName(e.target.value);
+                            if (errors.name) {
+                              const newErrors = { ...errors };
+                              delete newErrors.name;
+                              setErrors(newErrors);
+                            }
+                          }}
+                          className={`w-full pl-10 pr-4 py-2 border-2 ${
+                            errors.name ? 'border-red-500' : 'border-gray-200'
+                          } rounded-lg focus:border-black focus:ring-1 focus:ring-black transition-colors duration-200`}
+                          placeholder="Enter your name"
+                          required
+                        />
+                      </div>
+                      {errors.name && (
+                        <p className="text-red-500 text-xs mt-1">{errors.name}</p>
+                      )}
+                    </div>
+                  </motion.div>
                 )}
-              </label>
-            </div>
-          )}
+              </AnimatePresence>
 
-          <button
-            type="submit"
-            className="w-full bg-black text-white py-2.5 rounded-md hover:bg-gray-800 transform transition-all duration-300 hover:scale-[1.02] text-base font-medium"
-          >
-            {isSignUp ? "Sign Up" : "Sign In"}
-          </button>
+              <div className="relative">
+                <label className="block text-sm font-medium text-gray-700 mb-1">Email</label>
+                <div className="relative">
+                  <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={18} />
+                  <input
+                    type="email"
+                    value={email}
+                    onChange={(e) => {
+                      setEmail(e.target.value);
+                      if (errors.email) {
+                        const newErrors = { ...errors };
+                        delete newErrors.email;
+                        setErrors(newErrors);
+                      }
+                    }}
+                    className={`w-full pl-10 pr-4 py-2 border-2 ${
+                      errors.email ? 'border-red-500' : 'border-gray-200'
+                    } rounded-lg focus:border-black focus:ring-1 focus:ring-black transition-colors duration-200`}
+                    placeholder="Enter your email"
+                    required
+                  />
+                </div>
+                {errors.email && (
+                  <p className="text-red-500 text-xs mt-1">{errors.email}</p>
+                )}
+              </div>
 
-          <div className="relative my-4">
-            <div className="absolute inset-0 flex items-center">
-              <div className="w-full border-t border-gray-200"></div>
-            </div>
-            <div className="relative flex justify-center text-sm">
-              <span className="px-2 bg-white text-gray-500">Or continue with</span>
-            </div>
+              <div className="relative">
+                <label className="block text-sm font-medium text-gray-700 mb-1">Password</label>
+                <div className="relative">
+                  <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={18} />
+                  <input
+                    type={showPassword ? "text" : "password"}
+                    value={password}
+                    onChange={(e) => {
+                      setPassword(e.target.value);
+                      if (errors.password) {
+                        const newErrors = { ...errors };
+                        delete newErrors.password;
+                        setErrors(newErrors);
+                      }
+                    }}
+                    className={`w-full pl-10 pr-10 py-2 border-2 ${
+                      errors.password ? 'border-red-500' : 'border-gray-200'
+                    } rounded-lg focus:border-black focus:ring-1 focus:ring-black transition-colors duration-200`}
+                    placeholder="Enter your password"
+                    required
+                  />
+                  <button
+                    type="button"
+                    onClick={() => setShowPassword(!showPassword)}
+                    className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600"
+                  >
+                    {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+                  </button>
+                </div>
+                {errors.password && (
+                  <p className="text-red-500 text-xs mt-1">{errors.password}</p>
+                )}
+                {isSignUp && password && (
+                  <div className="mt-2">
+                    <div className="flex gap-1 mb-1">
+                      {[...Array(5)].map((_, index) => (
+                        <motion.div
+                          key={index}
+                          initial={{ scaleX: 0 }}
+                          animate={{ scaleX: 1 }}
+                          className={`h-1 flex-1 rounded-full ${
+                            index < getPasswordStrength(password).strength
+                              ? 'bg-black'
+                              : 'bg-gray-200'
+                          }`}
+                        />
+                      ))}
+                    </div>
+                    <p className={`text-xs ${
+                      getPasswordStrength(password).strength >= 4 
+                        ? 'text-green-600' 
+                        : 'text-gray-500'
+                    }`}>
+                      {getPasswordStrength(password).label}
+                    </p>
+                  </div>
+                )}
+              </div>
+
+              <AnimatePresence mode="wait">
+                {isSignUp && (
+                  <motion.div
+                    initial={{ opacity: 0, height: 0 }}
+                    animate={{ opacity: 1, height: "auto" }}
+                    exit={{ opacity: 0, height: 0 }}
+                    transition={{ duration: 0.2 }}
+                  >
+                    <div className="relative">
+                      <label className="block text-sm font-medium text-gray-700 mb-1">Confirm Password</label>
+                      <div className="relative">
+                        <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={18} />
+                        <input
+                          type={showConfirmPassword ? "text" : "password"}
+                          value={confirmPassword}
+                          onChange={(e) => {
+                            setConfirmPassword(e.target.value);
+                            if (errors.confirmPassword) {
+                              const newErrors = { ...errors };
+                              delete newErrors.confirmPassword;
+                              setErrors(newErrors);
+                            }
+                          }}
+                          className={`w-full pl-10 pr-10 py-2 border-2 ${
+                            errors.confirmPassword ? 'border-red-500' : 'border-gray-200'
+                          } rounded-lg focus:border-black focus:ring-1 focus:ring-black transition-colors duration-200`}
+                          placeholder="Confirm your password"
+                          required
+                        />
+                        <button
+                          type="button"
+                          onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                          className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600"
+                        >
+                          {showConfirmPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+                        </button>
+                      </div>
+                      {errors.confirmPassword && (
+                        <p className="text-red-500 text-xs mt-1">{errors.confirmPassword}</p>
+                      )}
+                    </div>
+                  </motion.div>
+                )}
+              </AnimatePresence>
+
+              <motion.button
+                type="submit"
+                whileHover={{ scale: 1.01 }}
+                whileTap={{ scale: 0.99 }}
+                className={`w-full bg-black text-white py-3 rounded-lg font-medium
+                  shadow-lg hover:bg-gray-900 transition-all duration-200
+                  flex items-center justify-center ${isLoading ? 'opacity-70 cursor-not-allowed' : ''}`}
+                disabled={isLoading}
+              >
+                {isLoading ? (
+                  <div className="flex items-center">
+                    <motion.div
+                      animate={{ rotate: 360 }}
+                      transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
+                      className="w-5 h-5 border-2 border-white border-t-transparent rounded-full mr-2"
+                    />
+                    <span>Processing...</span>
+                  </div>
+                ) : (
+                  <span>{isSignUp ? "Create Account" : "Sign In"}</span>
+                )}
+              </motion.button>
+
+              <div className="relative my-6">
+                <div className="absolute inset-0 flex items-center">
+                  <div className="w-full border-t border-gray-200"></div>
+                </div>
+                <div className="relative flex justify-center text-sm">
+                  <span className="px-2 bg-white text-gray-500">Or continue with</span>
+                </div>
+              </div>
+
+              <motion.button
+                type="button"
+                whileHover={{ scale: 1.01 }}
+                whileTap={{ scale: 0.99 }}
+                className={`w-full flex items-center justify-center border-2 border-gray-200 py-2.5 rounded-lg
+                  hover:bg-gray-50 transition-all duration-200 ${isLoading ? 'opacity-70 cursor-not-allowed' : ''}`}
+                onClick={handleGoogleSignIn}
+                disabled={isLoading}
+              >
+                <FcGoogle className="mr-2" size={20} />
+                <span className="text-gray-700">
+                  {isSignUp ? "Sign up" : "Sign in"} with Google
+                </span>
+              </motion.button>
+
+              <div className="mt-6 text-center">
+                <motion.button
+                  type="button"
+                  whileHover={{ scale: 1.02 }}
+                  onClick={() => {
+                    setIsSignUp(!isSignUp);
+                    setErrors({});
+                    setAlert(null);
+                  }}
+                  className="text-sm text-gray-600 hover:text-gray-900 transition-colors duration-200"
+                >
+                  {isSignUp ? "Already have an account?" : "Don't have an account?"}{" "}
+                  <span className="font-medium text-black hover:text-gray-800">
+                    {isSignUp ? "Sign In" : "Sign Up"}
+                  </span>
+                </motion.button>
+              </div>
+            </form>
           </div>
-
-          <button
-            type="button"
-            className="w-full flex items-center justify-center border-2 border-gray-200 py-2.5 rounded-md hover:bg-gray-50 transition-all duration-300"
-            onClick={handleGoogleSignIn}
-          >
-            <FcGoogle className="mr-2" size={20} />
-            <span className="text-gray-700">
-              {isSignUp ? "Sign up" : "Sign in"} with Google
-            </span>
-          </button>
-        </form>
-
-        <p className="text-center text-sm text-gray-600 mt-4">
-          {isSignUp ? "Already have an account?" : "Don't have an account?"}{" "}
-          <button
-            onClick={() => {
-              setIsSignUp(!isSignUp);
-              setErrors({});
-              setAlert(null);
-            }}
-            className="text-black font-medium hover:text-gray-700 transition-colors duration-300"
-          >
-            {isSignUp ? "Sign In" : "Sign Up"}
-          </button>
-        </p>
-      </div>
+        </div>
+      </motion.div>
     </div>
   );
 }
+ 
