@@ -3,6 +3,7 @@
 import { useState, useEffect, useCallback } from "react";
 import Image from "next/image";
 import { ChevronLeft, ChevronRight } from "lucide-react";
+import { useRouter } from "next/navigation";
 
 const desktopImages = ["/Runvay(logo).jpg", "/carousel-sample.jpg", "/carousel-sample.jpg"];
 const mobileImages = ["/runvay-bl.png", "/mobile2.jpg", "/mobile3.jpg"];
@@ -22,6 +23,7 @@ const useMediaQuery = (query: string) => {
 };
 
 const Carousel = () => {
+  const router = useRouter();
   const isMobile = useMediaQuery("(max-width: 768px)");
   const images = isMobile ? mobileImages : desktopImages;
 
@@ -55,7 +57,7 @@ const Carousel = () => {
         >
           {images.map((src, index) => (
             <div key={index} className="w-full flex-shrink-0 relative h-[80vh]">
-              <Image 
+              <Image onClick={()=>{router.push(`/search?q=`);}}
                 src={src} 
                 alt={`Slide ${index + 1}`} 
                 fill 
