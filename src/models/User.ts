@@ -8,24 +8,24 @@ interface User extends Document {
   oauthProvider?: string;
   createdAt: Date;
   updatedAt: Date;
- }
+ 
+}
 
 const userSchema = new Schema<User>(
   {
     email: { type: String, required: true, unique: true },
-    salt: { type: String }, // Store salt
-    hashedPassword: { type: String }, // Store hashed password
+    salt: { type: String },
+    hashedPassword: { type: String },
     name: { type: String, required: true },
     oauthProvider: {
       type: String,
       enum: ["google", "credentials"],
       default: "credentials",
     },
-    
-  }, // Add this line
+   },
   { timestamps: true }
 );
 
-const User = mongoose.models.User || mongoose.model<User>("User", userSchema);
+ const User = mongoose.models.User || mongoose.model<User>("User", userSchema);
 
 export default User;

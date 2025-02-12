@@ -200,8 +200,10 @@ const Navbar = ({ products }: NavbarProps) => {
                 </div>
               )}
             </div>
+              <div className="mr-1">
 
             <CartIcon />
+              </div>
 
             <div className="relative" ref={profileRef}>
               {session ? (

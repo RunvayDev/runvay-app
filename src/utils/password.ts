@@ -1,13 +1,16 @@
-import crypto from "crypto";
+import CryptoJS from "crypto-js";
 
 // Generate a random salt
 export const generateSalt = () => {
-  return crypto.randomBytes(16).toString("hex");
+  return CryptoJS.lib.WordArray.random(128 / 8).toString();
 };
 
-// Hash the password with the provided salt
+// Hash a password with a given salt
 export const hashPassword = (password: string, salt: string) => {
-  return crypto.pbkdf2Sync(password, salt, 1000, 64, "sha512").toString("hex");
+  return CryptoJS.PBKDF2(password, salt, {
+    keySize: 512 / 32,
+    iterations: 1000,
+  }).toString();
 };
 
 // Compare entered password with stored hash
