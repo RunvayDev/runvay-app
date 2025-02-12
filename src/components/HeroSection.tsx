@@ -1,5 +1,8 @@
+"use client";
 import Image from "next/image";
 import ButtonComponent from "./ButtonComponent";
+import { useRouter } from "next/navigation";
+
 
 interface HeroProps{
     hTitle: string;
@@ -10,6 +13,7 @@ interface HeroProps{
 }
 
 const HeroSection = ({hTitle,subTitle,hImage,hColor1, hColor2}:HeroProps) => {
+  const router = useRouter();
   return (
     <section className={`relative w-full min-h-screen flex flex-col items-center justify-center text-center bg-gradient-to-br ${hColor1} ${hColor2} px-6 `}>
       {/* Background Blur Effect */}
@@ -25,9 +29,9 @@ const HeroSection = ({hTitle,subTitle,hImage,hColor1, hColor2}:HeroProps) => {
 
         <div className="mt-6 flex justify-center gap-4">
           
-            <ButtonComponent ButtonName="Shop Now" ButtonColor1="bg-white" ButtonColor2="hover:bg-gray-200" TextColor="text-blue-600" className=" px-6 py-3 font-semibold"/>
+            <ButtonComponent onClick={()=>{router.push(`/search?q=`);}} ButtonName="Shop Now" ButtonColor1="bg-white" ButtonColor2="hover:bg-gray-200" TextColor="text-blue-600" className=" px-6 py-3 font-semibold"/>
 
-            <ButtonComponent ButtonName="Learn more" ButtonColor1="bg-white" ButtonColor2="hover:bg-gray-200" TextColor="text-blue-600" className="px-6 py-3 font-semibold"/>
+            <ButtonComponent onClick={()=>{router.push("/AboutUs")}} ButtonName="Learn more" ButtonColor1="bg-white" ButtonColor2="hover:bg-gray-200" TextColor="text-blue-600" className="px-6 py-3 font-semibold"/>
 
         </div>
       </div>
