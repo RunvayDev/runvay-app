@@ -1,4 +1,4 @@
-import { getProductBySlug, getAllProducts } from "@/lib/mongodb";
+import { getCachedProducts } from "@/lib/productCache";
 import { notFound } from "next/navigation";
 import ProductDetail from "@/components/ProductDetail";
 import ProductReviews from "@/components/ProductReviews";
@@ -11,13 +11,15 @@ async function getProductReviews(productId: string) {
     .sort({ createdAt: -1 })
     .limit(10);
   return JSON.parse(JSON.stringify(reviews));
-}
+} 
 
 // Get suggested products (excluding current product)
-async function getSuggestedProducts(currentSlug: string, currentColor: string) {
-  const products = await getAllProducts();
-  return products
-    .filter((p) => p.slug !== currentSlug && p.color?.includes(currentColor))
+async function getSuggestedProducts(cachedProducts: any[], // Using cached products
+  currentSlug: string,
+  currentColor: string
+) {
+  return cachedProducts
+    .filter((p) => p.slug !== currentSlug)
     .slice(0, 4);
 }
 
@@ -32,7 +34,8 @@ export default async function ProductPage({
   }
 
   const slug = decodeURIComponent(params.slug);
-  const product = await getProductBySlug(slug);
+  const cachedProducts = await getCachedProducts();
+  const product = cachedProducts.find((p) => p.slug === slug);
 
   if (!product) {
     notFound();
@@ -40,7 +43,7 @@ export default async function ProductPage({
 
   const [reviews, suggestedProducts] = await Promise.all([
     getProductReviews(product._id.toString()), // Ensure ID is string
-    getSuggestedProducts(slug, product.color?.[0] || ""), // Handle optional color
+    getSuggestedProducts(cachedProducts,slug, product.color?.[0] || ""), // Handle optional color
   ]);
 
   return (
@@ -48,7 +51,7 @@ export default async function ProductPage({
       <ProductDetail product={JSON.parse(JSON.stringify(product))} />
       <div className="container mx-auto px-4">
         <ProductReviews
-          productId={product._id.toString()}
+          productId={product._id?.toString()}
           initialReviews={reviews}
         />
         <SuggestedProducts products={suggestedProducts} />

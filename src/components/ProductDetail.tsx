@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import Image from "next/image";
-import AddToCartButton from "@/components/AddToCartButton"; // Import the AddToCartButton
+import AddToCartButton from "@/components/AddToCartButton";  
 import { Star} from "lucide-react";
  import { Card, CardContent } from "@/components/ui/card";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
@@ -10,7 +10,7 @@ import { Label } from "@/components/ui/label";
 import { Separator } from "@/components/ui/separator";
 
 type Product = {
-  _id: string; // Add _id to match the schema
+  _id: string;  
   name: string;
   description: string;
   price: number;
