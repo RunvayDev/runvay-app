@@ -22,7 +22,7 @@ export async function POST(request: Request) {
   if (!session?.user?.email) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
   const user = await User.findOne({ email: session.user.email });
 
-  const cart = await Cart.findOneAndUpdate(
+  await Cart.findOneAndUpdate(
     { userId: user._id },
     { $set: { items: cartItems } },
     { upsert: true, new: true }

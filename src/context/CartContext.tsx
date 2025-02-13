@@ -29,7 +29,7 @@ const CartContext = createContext<CartContextType>({} as CartContextType);
 export function CartProvider({ children }: { children: React.ReactNode }) {
   const [cartItems, setCartItems] = useState<CartItem[]>([]);
   const [isSyncing, setIsSyncing] = useState(false);
-  const { data: session, status } = useSession();
+  const { status } = useSession();
 
   // Merge server and local carts
   const mergeCarts = (serverCart: CartItem[], localCart: CartItem[]) => {

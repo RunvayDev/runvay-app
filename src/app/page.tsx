@@ -3,15 +3,12 @@ import CardSection from "@/components/CardSection";
 import HeroSection from "@/components/HeroSection";
 import { getCachedProducts } from "@/lib/productCache";
 import { Product } from "@/types/product"; 
-import {auth} from "@/lib/auth";
-
+ 
 
  
 
 export default async function Home() {
-  const session = await auth();
-  const userid = session?.user?.id;
-  const username= session?.user?.name;
+ 
 
   const products: Product[] = await getCachedProducts();
 

@@ -4,7 +4,20 @@ import ProductDetail from "@/components/ProductDetail";
 import ProductReviews from "@/components/ProductReviews";
 import SuggestedProducts from "@/components/SuggestedProducts";
 import Review from "@/models/Review";
+import {Product }from "@/types/product"
+ 
 
+interface Product {
+  _id: string;
+  name: string;
+  description?: string;
+  price: number;
+  stock: number;
+  size: string[];
+  color: string[];
+  images: string[];
+  slug: string;
+}
 // Get reviews for a product
 async function getProductReviews(productId: string) {
   const reviews = await Review.find({ productId })
@@ -14,9 +27,8 @@ async function getProductReviews(productId: string) {
 } 
 
 // Get suggested products (excluding current product)
-async function getSuggestedProducts(cachedProducts: any[], // Using cached products
-  currentSlug: string,
-  currentColor: string
+async function getSuggestedProducts(cachedProducts: Product[], // Using cached products
+  currentSlug: string
 ) {
   return cachedProducts
     .filter((p) => p.slug !== currentSlug)
@@ -43,7 +55,7 @@ export default async function ProductPage({
 
   const [reviews, suggestedProducts] = await Promise.all([
     getProductReviews(product._id.toString()), // Ensure ID is string
-    getSuggestedProducts(cachedProducts,slug, product.color?.[0] || ""), // Handle optional color
+    getSuggestedProducts(cachedProducts,slug), // Handle optional color
   ]);
 
   return (

@@ -2,7 +2,7 @@
 import { useRouter } from "next/navigation";
 import { signIn } from "next-auth/react";
 import { FcGoogle } from "react-icons/fc";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { X, Lock, Mail, User, EyeOff, Eye } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
@@ -140,7 +140,7 @@ export default function AuthForm() {
         }
       }
     } catch (error) {
-      showAlert('error', "An unexpected error occurred. Please try again.");
+      showAlert((error as Error), "An unexpected error occurred. Please try again.");
     } finally {
       setIsLoading(false);
     }
@@ -151,7 +151,8 @@ export default function AuthForm() {
     try {
       await signIn("google", { callbackUrl: "/" });
     } catch (error) {
-      showAlert('error', "Google sign-in failed. Please try again.");
+      showAlert(error, "Google sign-in failed. Please try again.");
+    
     } finally {
       setIsLoading(false);
     }

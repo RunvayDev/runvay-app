@@ -1,7 +1,6 @@
 import { getAllProducts } from "@/lib/mongodb";
 import { Product } from "@/types/product";
-import { ObjectId } from "mongoose";
-
+ 
 // Global variables for caching
 let cachedProducts: Product[] | null = null;
 let lastFetchTime = 0;
