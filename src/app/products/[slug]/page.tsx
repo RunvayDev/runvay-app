@@ -45,9 +45,10 @@ async function getSuggestedProducts(
     getProductReviews(product._id.toString()),
     getSuggestedProducts(cachedProducts, slugDecoded),
   ]);
+  product._id= product._id.toString(); 
   return (
     <main className="min-h-screen py-8">
-      <ProductDetail product={ JSON.parse(JSON.stringify(product))} />
+      <ProductDetail product={ product} />
       <div className="container mx-auto px-4">
         <ProductReviews
           productId={product._id.toString()}

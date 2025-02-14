@@ -1,15 +1,10 @@
 import { useCart } from '@/context/CartContext';
 import { useState } from 'react';
 import { Check, ShoppingCart, Minus, Plus } from 'lucide-react';
+import {Product} from '@/types/product';
 
 interface AddToCartProps {
-  product: {
-    _id: string;
-    name: string;
-    price: number;
-    slug: string;
-    images: string[];
-  };
+  product:  Product
   selectedSize: string;
   selectedColor: string;
 }
@@ -22,7 +17,7 @@ export default function AddToCartButton({ product, selectedSize, selectedColor }
 
   const handleAddToCart = () => {
     addToCart({
-      productId: product._id,
+      productId: product._id as string,
       name: product.name,
       price: product.price,
       quantity,

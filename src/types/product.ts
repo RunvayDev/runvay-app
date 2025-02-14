@@ -1,6 +1,5 @@
-import { ObjectId } from 'mongoose';
-export interface Product {
-    _id:  string | ObjectId;
+ export interface Product {
+    _id:  string  ;
     name: string;
     description?: string;
     price: number;

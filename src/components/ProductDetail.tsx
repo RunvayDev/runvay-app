@@ -8,20 +8,11 @@ import { Star} from "lucide-react";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Label } from "@/components/ui/label";
 import { Separator } from "@/components/ui/separator";
+ import { Product } from "@/types/product";
 
-type Product = {
-  _id: string;  
-  name: string;
-  description: string;
-  price: number;
-  stock: number;
-  size: string[];
-  color: string[];
-  images: string[];
-  slug: string;
-};
+ 
 
-export default function ProductDetail({ product }: { product: Product }) {
+export default function ProductDetail({ product }: { product: Product}) {
   const [selectedSize, setSelectedSize] = useState(product.size[0]);
   const [selectedColor, setSelectedColor] = useState(product.color[0]);
   const [selectedImage, setSelectedImage] = useState(product.images[0]);
@@ -158,6 +149,9 @@ export default function ProductDetail({ product }: { product: Product }) {
               price: product.price,
               slug: product.slug,
               images: product.images,
+              stock: product.stock,
+              size: product.size,
+              color: product.color,
             }}
             selectedSize={selectedSize}
             selectedColor={selectedColor}
