@@ -1,6 +1,6 @@
 import { ObjectId } from 'mongoose';
 export interface Product {
-    _id: ObjectId,
+    _id:  string | ObjectId;
     name: string;
     description?: string;
     price: number;

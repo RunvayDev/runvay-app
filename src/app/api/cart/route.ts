@@ -10,7 +10,7 @@ export async function GET() {
   const session = await auth();
   if (!session?.user?.email) return NextResponse.json([]);
   
-  const cart = await Cart.findOne({ userId: session.user.id });
+  const cart = await Cart.findOne({ userId: session.user.email });
   return NextResponse.json(cart?.items || []);
 }
 

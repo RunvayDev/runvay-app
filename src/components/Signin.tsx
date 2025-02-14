@@ -135,12 +135,14 @@ export default function AuthForm() {
 
         if (result?.error) {
           showAlert('error', "Invalid email or password");
+        
         } else {
           router.push("/");
         }
       }
-    } catch (error) {
-      showAlert((error as Error), "An unexpected error occurred. Please try again.");
+    } catch (err) {
+      showAlert( "error","An unexpected error occurred. Please try again.");
+      console.error(err);
     } finally {
       setIsLoading(false);
     }
@@ -150,15 +152,15 @@ export default function AuthForm() {
     setIsLoading(true);
     try {
       await signIn("google", { callbackUrl: "/" });
-    } catch (error) {
-      showAlert(error, "Google sign-in failed. Please try again.");
-    
+    } catch (err) {
+      showAlert('error', "Google sign-in failed. Please try again.");
+      console.error(err);
+
     } finally {
       setIsLoading(false);
     }
   };
 
-  
   return (
     <div className="min-h-screen bg-gray-50 flex items-center justify-center p-4">
       <motion.div 
@@ -444,4 +446,3 @@ export default function AuthForm() {
     </div>
   );
 }
- 

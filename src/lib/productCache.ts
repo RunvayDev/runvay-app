@@ -1,5 +1,6 @@
 import { getAllProducts } from "@/lib/mongodb";
 import { Product } from "@/types/product";
+import { ObjectId } from "mongoose";
  
 // Global variables for caching
 let cachedProducts: Product[] | null = null;
@@ -24,7 +25,7 @@ export async function getCachedProducts(): Promise<Product[]> {
 
   // Map the raw products to match the Product type
   cachedProducts = rawProducts.map((product) => ({
-    _id: product._id.toString(),
+    _id: product._id as ObjectId,
     name: product.name,
     description: product.description,
     price: product.price,
