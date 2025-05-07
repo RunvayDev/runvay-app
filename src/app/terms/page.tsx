@@ -9,7 +9,7 @@ export default function TermsPage() {
       <div className="space-y-8 text-gray-800">
         <p>
           Welcome to <strong>runvay.co.in</strong>, the official website of Runvay, a clothing brand based in India.
-          These Terms & Conditions ("Terms") govern your access to and use of our website and services.
+          These Terms & Conditions (Terms) govern your access to and use of our website and services.
         </p>
 
         <p>
@@ -37,7 +37,7 @@ export default function TermsPage() {
           <ul className="list-disc list-inside ml-4">
             <li>Placing an order constitutes an offer to purchase.</li>
             <li>We reserve the right to accept or reject any order.</li>
-            <li>Email confirmation doesn’t guarantee fulfillment until dispatched.</li>
+            <li>Email confirmation does not guarantee fulfillment until dispatched.</li>
           </ul>
         </div>
 
@@ -45,8 +45,8 @@ export default function TermsPage() {
           <h2 className="text-xl font-semibold">4. Pricing & Payment</h2>
           <ul className="list-disc list-inside ml-4">
             <li>All prices are in INR (₹), inclusive of applicable taxes.</li>
-            <li>Payments accepted via Razorpay, UPI, Cards, or Net Banking.</li>
-            <li>We don’t store payment info. For issues, contact your bank.</li>
+            <li>Payments accepted via Razorpay, UPI, cards, or net banking.</li>
+            <li>We do not store payment information. For issues, contact your bank.</li>
           </ul>
         </div>
 
@@ -82,7 +82,7 @@ export default function TermsPage() {
         <div>
           <h2 className="text-xl font-semibold">8. Prohibited Activities</h2>
           <ul className="list-disc list-inside ml-4">
-            <li>No illegal/unauthorized activity allowed.</li>
+            <li>No illegal or unauthorized activity allowed.</li>
             <li>Do not violate any laws or third-party rights.</li>
             <li>No hacking or misusing the website.</li>
           </ul>
@@ -98,7 +98,7 @@ export default function TermsPage() {
         <div>
           <h2 className="text-xl font-semibold">10. Dispute Resolution</h2>
           <p>
-            Contact us first at support@runvay.co.in for disputes. All legal matters are under [Insert City, State] jurisdiction, India.
+            Contact us first at support@runvay.co.in for disputes. All legal matters are under Bangalore, Karnataka jurisdiction, India.
           </p>
         </div>
 
@@ -110,9 +110,9 @@ export default function TermsPage() {
         <div>
           <h2 className="text-xl font-semibold">12. Contact Information</h2>
           <ul className="list-inside ml-4">
-            <li>📧 Email: support@runvay.co.in</li>
-            <li>🌐 Website: https://www.runvay.co.in</li>
-            <li>📬 Address: [Insert your official mailing address]</li>
+            <li>Email: support@runvay.co.in</li>
+            <li>Website: https://www.runvay.co.in</li>
+            <li>Address: [Insert your official mailing address]</li>
           </ul>
         </div>
       </div>

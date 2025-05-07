@@ -9,8 +9,8 @@ export default function ContactPage() {
       </h1>
 
       <p className="text-center text-lg text-gray-600 mb-10">
-        Whether you have a question, feedback, or just want to say hello —
-        we’d love to hear from you.
+        Whether you have a question, feedback, or just want to say hello &mdash;
+        we&apos;d love to hear from you.
       </p>
 
       <form className="space-y-6 bg-white shadow-md rounded-lg p-6">
@@ -56,10 +56,13 @@ export default function ContactPage() {
           📍 <strong>Runvay HQ:</strong> Bangalore, India
         </p>
         <p>
-          📧 <strong>Email:</strong> <a href="info@runvay.co.in" className="text-blue-600 hover:underline">info@runvay.co.in</a>
+          📧 <strong>Email:</strong>{" "}
+          <a href="mailto:info@runvay.co.in" className="text-blue-600 hover:underline">
+            info@runvay.co.in
+          </a>
         </p>
         <p>
-          📱 <strong>Phone:</strong> +91-98--------
+          📱 <strong>Phone:</strong> +91-98--------{/* Replace with actual number */}
         </p>
       </div>
     </main>

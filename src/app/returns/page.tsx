@@ -5,13 +5,13 @@ const ReturnsPolicyPage = () => {
   return (
     <main className="max-w-5xl mx-auto px-6 py-12 text-gray-800">
       <h1 className="text-4xl font-bold mb-6">Returns & Refunds Policy</h1>
-      <p className="mb-8 text-sm text-gray-500">Effective Date: [Insert Date]</p>
+      <p className="mb-8 text-sm text-gray-500">Effective Date: May 7, 2025</p>
 
       <section className="space-y-6">
         <p>
           At <strong>Runvay</strong>, we want you to be completely satisfied with your purchase. If
-          for any reason you are not satisfied, you may be eligible for a return or refund in
-          accordance with the policy outlined below.
+          for any reason you are not, you may be eligible for a return or refund in accordance with
+          the policy outlined below.
         </p>
 
         <div>
@@ -19,7 +19,10 @@ const ReturnsPolicyPage = () => {
           <ul className="list-disc pl-6 space-y-1">
             <li>Items must be returned within 7 days of delivery.</li>
             <li>Items must be unused, unwashed, and in original packaging with tags intact.</li>
-            <li>Certain items (e.g., undergarments, cosmetics) may be non-returnable for hygiene reasons.</li>
+            <li>
+              Certain items (e.g., undergarments, cosmetics) may be non-returnable for hygiene
+              reasons.
+            </li>
           </ul>
         </div>
 
@@ -27,13 +30,10 @@ const ReturnsPolicyPage = () => {
           <h2 className="text-2xl font-semibold mt-8 mb-2">2. How to Initiate a Return</h2>
           <p>
             To initiate a return, please email our support team at{" "}
-            <a
-              href="mailto:support@runvay.co.in"
-              className="text-blue-600 underline"
-            >
+            <a href="mailto:support@runvay.co.in" className="text-blue-600 underline">
               support@runvay.co.in
             </a>{" "}
-            with the following:
+            with the following details:
           </p>
           <ul className="list-disc pl-6 space-y-1">
             <li>Order ID</li>
@@ -46,10 +46,7 @@ const ReturnsPolicyPage = () => {
         <div>
           <h2 className="text-2xl font-semibold mt-8 mb-2">3. Refunds</h2>
           <ul className="list-disc pl-6 space-y-1">
-            <li>
-              Once we receive and inspect your return, we will notify you of the approval or
-              rejection of your refund.
-            </li>
+            <li>We will inspect your return upon receipt and notify you of approval or rejection.</li>
             <li>Approved refunds will be processed within 5–7 business days.</li>
             <li>Refunds will be issued to the original payment method.</li>
           </ul>
@@ -60,10 +57,7 @@ const ReturnsPolicyPage = () => {
           <p>
             We only replace items if they are defective, damaged, or incorrectly delivered. For
             exchange requests, email us at{" "}
-            <a
-              href="mailto:support@runvay.co.in"
-              className="text-blue-600 underline"
-            >
+            <a href="mailto:support@runvay.co.in" className="text-blue-600 underline">
               support@runvay.co.in
             </a>
             .
@@ -82,26 +76,26 @@ const ReturnsPolicyPage = () => {
           <h2 className="text-2xl font-semibold mt-8 mb-2">6. Shipping Costs</h2>
           <ul className="list-disc pl-6 space-y-1">
             <li>Shipping charges are non-refundable unless the item is faulty.</li>
-            <li>Return shipping is the customer’s responsibility unless the item is incorrect/damaged.</li>
+            <li>Return shipping is the customer’s responsibility unless the item is incorrect or damaged.</li>
           </ul>
         </div>
 
         <div>
           <h2 className="text-2xl font-semibold mt-8 mb-2">7. Contact Us</h2>
-          <p>
-            For any questions related to returns or refunds, please contact us at:
-          </p>
-          <ul className="list-none pl-0 mt-2">
+          <p>If you have any questions regarding returns or refunds, feel free to contact us:</p>
+          <ul className="list-none pl-0 mt-2 space-y-1">
             <li>
               📧 Email:{" "}
-              <a
-                href="mailto:support@runvay.co.in"
-                className="text-blue-600 underline"
-              >
+              <a href="mailto:support@runvay.co.in" className="text-blue-600 underline">
                 support@runvay.co.in
               </a>
             </li>
-            <li>📬 Address: [Insert your business's official address]</li>
+            <li>
+              📬 Address:{" "}
+              <address className="not-italic">
+                123 Runvay Street, Fashion Plaza, Mumbai, Maharashtra 400001, India
+              </address>
+            </li>
           </ul>
         </div>
       </section>

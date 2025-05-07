@@ -1,5 +1,4 @@
 
-
 import React from "react";
 
 export default function FAQPage() {
@@ -7,7 +6,7 @@ export default function FAQPage() {
     {
       question: "What types of T-shirts does Runvay offer?",
       answer:
-        "Runvay specializes in premium printed T-shirts — from minimalist graphics to bold artistic statements, designed for all-day comfort and unique self-expression.",
+        "Runvay specializes in premium printed T-shirts &mdash; from minimalist graphics to bold artistic statements, designed for all-day comfort and unique self-expression.",
     },
     {
       question: "What sizes are available?",
@@ -32,7 +31,7 @@ export default function FAQPage() {
     {
       question: "Do you ship internationally?",
       answer:
-        "Currently, we ship only within India. International shipping is coming soon — stay tuned!",
+        "Currently, we ship only within India. International shipping is coming soon &mdash; stay tuned!",
     },
     {
       question: "Can I return or exchange a product?",
@@ -56,7 +55,10 @@ export default function FAQPage() {
             <h2 className="text-xl font-semibold mb-2 text-gray-900">
               {faq.question}
             </h2>
-            <p className="text-gray-700 leading-relaxed">{faq.answer}</p>
+            <p
+              className="text-gray-700 leading-relaxed"
+              dangerouslySetInnerHTML={{ __html: faq.answer }}
+            />
           </div>
         ))}
       </div>
