@@ -44,7 +44,7 @@ const HeroSection = ({ hTitle, subTitle, hImage, hColor1, hColor2 }: HeroProps) 
 
           <ButtonComponent
             onClick={() => {
-              router.push("/AboutUs");
+              router.push("/about");
             }}
             ButtonName="Learn more"
             ButtonColor1="bg-white"

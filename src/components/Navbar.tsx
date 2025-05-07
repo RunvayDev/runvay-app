@@ -5,7 +5,7 @@ import { signOut } from "next-auth/react"; // Import NextAuth functions
 import Image from "next/image";
 import { Menu, X, User } from "lucide-react";
 import { useRouter } from "next/navigation";
- import CartIcon from "@/components/CartIcon";
+import CartIcon from "@/components/CartIcon";
 import { useSession } from "next-auth/react"; // Import NextAuth functions
 
 interface Product {
@@ -108,14 +108,23 @@ const Navbar = ({ products }: NavbarProps) => {
         </div>
 
         <nav
-          className={`${
-            isMenuOpen
-              ? "flex flex-col absolute top-16 left-0 right-0 bg-white p-4 shadow-md z-10"
-              : "hidden"
-          } lg:flex lg:items-center lg:space-x-4 lg:static lg:shadow-none lg:p-0`}
+          className={`${isMenuOpen
+            ? "flex flex-col absolute top-16 left-0 right-0 bg-white p-4 shadow-md z-10"
+            : "hidden"
+            } lg:flex lg:items-center lg:space-x-4 lg:static lg:shadow-none lg:p-0`}
         >
           <ul className="flex flex-col lg:flex-row space-y-4 lg:space-y-0 lg:space-x-4">
             {/* Other menu items */}
+
+            <li>
+              <Link
+                href="/"
+                className="relative text-lg font-medium text-gray-700 hover:text-black transition-colors duration-300 after:content-[''] after:absolute after:left-0 after:bottom-0 after:w-0 after:h-[2px] after:bg-black after:transition-all after:duration-300 hover:after:w-full"
+              >
+                Home
+              </Link>
+            </li>
+
             <li>
               <Link
                 href={{ pathname: "/search", query: { q: "Shirt" } }}
