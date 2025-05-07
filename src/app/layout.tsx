@@ -10,7 +10,7 @@ import Footer from "@/components/Footer";
 interface Product {
   name: string;
   description?: string;
-  price: number;  
+  price: number;
   stock: number;
   size: string[];
   color: string[];
@@ -36,21 +36,26 @@ export default async function RootLayout({ children }: { children: ReactNode }) 
   } catch (error) {
     console.error("Error fetching cached products:", error);
   }
-  
+
   return (
     <html lang="en">
-        <body className="flex flex-col">
+      <head>
+        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
+        <meta charSet="UTF-8" />
+        <meta name="description" content="Runvay — Modern E-commerce Platform" />
+        <link rel="icon" href="/favicon.ico" />
+        <title>Runvay</title>
+      </head>
+      <body className="flex flex-col">
         <SessionProvider>
-        <CartProvider>
-          <Navbar products={products}/>
-        <main className="flex-grow min-h-screen">  
-          {children}
-        </main>
-          <Footer />
-        </CartProvider>
-    </SessionProvider>
+          <CartProvider>
+            <Navbar products={products} />
+            <main className="flex-grow min-h-screen">{children}</main>
+            <Footer />
+          </CartProvider>
+        </SessionProvider>
+      </body>
+    </html>
 
-        </body>
-      </html>
   );
 }

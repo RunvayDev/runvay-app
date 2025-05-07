@@ -161,7 +161,7 @@ const SearchResult = ({ products }: SearchProps) => {
       {/* Mobile Filter Button */}
       <div className="m-4">
         <button
-          className="lg:hidden sticky fixed top-4 left-4 bg-blue-500 text-white px-4 py-2 rounded z-50 w-fit"
+          className="lg:hidden sticky fixed top-4 left-4 bg-blue-500 text-white px-4 py-2 rounded z-49 w-fit"
           onClick={() => setIsFilterOpen(true)}
         >
           Show Filters

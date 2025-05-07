@@ -2,13 +2,13 @@ import Carousel from "@/components/Carousel";
 import CardSection from "@/components/CardSection";
 import HeroSection from "@/components/HeroSection";
 import { getCachedProducts } from "@/lib/productCache";
-import { Product } from "@/types/product"; 
- 
+import { Product } from "@/types/product";
 
- 
+
+
 
 export default async function Home() {
- 
+
 
   const products: Product[] = await getCachedProducts();
 
@@ -38,7 +38,7 @@ export default async function Home() {
   return (
     <>
       <Carousel />
-   
+
 
       {/* Featured Products Section */}
       <CardSection title="Trending Picks" products={featuredProducts} />
@@ -50,12 +50,12 @@ export default async function Home() {
         hColor1="from-blue-600"
         hColor2="to-cyan-300"
       />
-      
+
       {/* Top Picks Section */}
       <CardSection title="Top Picks" products={topPicks} />
 
       <HeroSection
-        hTitle="Latest Collection"
+        hTitle="Latest Collection Of The Season"
         subTitle="Shop the latest collection of the season."
         hImage="/Runvay(logo).jpg"
         hColor1="from-rose-400"
