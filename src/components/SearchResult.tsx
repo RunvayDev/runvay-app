@@ -252,7 +252,7 @@ const SearchResult = ({ products }: SearchProps) => {
         {filteredProducts.length === 0 ? (
           <p className="text-gray-600 text-center">No products found.</p>
         ) : (
-          <div className="py-2 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 auto-rows-fr justify-items-center">
+          <div className="py-2 grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 auto-rows-fr justify-items-center">
             {filteredProducts.map((product) => (
               <Link key={product.slug} href={`/products/${product.slug}`}>
                 <ProductCard product={product} />

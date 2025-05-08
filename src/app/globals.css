@@ -64,3 +64,12 @@
     @apply bg-background text-foreground;
   }
 }
+
+/* Disable pinch zoom and double-tap zoom */
+html,
+body {
+  touch-action: manipulation;
+  overscroll-behavior: none;
+  -ms-touch-action: manipulation; /* For older Edge/IE */
+}
+

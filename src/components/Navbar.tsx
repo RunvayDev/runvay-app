@@ -84,6 +84,12 @@ const Navbar = ({ products }: NavbarProps) => {
   const handleSearchSubmit = (query: string) => {
     setShowSuggestions(false);
     router.push(`/search?q=${encodeURIComponent(query)}`);
+    setIsMenuOpen(false);
+  };
+
+  const handleNavClick = (href: string | URL) => {
+    router.push(href.toString());
+    setIsMenuOpen(false); // Close mobile menu
   };
 
   return (
@@ -117,45 +123,45 @@ const Navbar = ({ products }: NavbarProps) => {
             {/* Other menu items */}
 
             <li>
-              <Link
-                href="/"
+              <button
+                onClick={() => handleNavClick("/")}
                 className="relative text-lg font-medium text-gray-700 hover:text-black transition-colors duration-300 after:content-[''] after:absolute after:left-0 after:bottom-0 after:w-0 after:h-[2px] after:bg-black after:transition-all after:duration-300 hover:after:w-full"
               >
                 Home
-              </Link>
+              </button>
             </li>
 
             <li>
-              <Link
-                href={{ pathname: "/search", query: { q: "Shirt" } }}
+              <button
+                onClick={() => handleNavClick("/search?q=Shirt")}
                 className="relative text-lg font-medium text-gray-700 hover:text-black transition-colors duration-300 after:content-[''] after:absolute after:left-0 after:bottom-0 after:w-0 after:h-[2px] after:bg-black after:transition-all after:duration-300 hover:after:w-full"
               >
                 Shirts
-              </Link>
+              </button>
             </li>
             <li>
-              <Link
-                href={{ pathname: "/search", query: { q: "T-Shirt" } }}
+              <button
+                onClick={() => handleNavClick("/search?q=T-Shirt")}
                 className="relative text-lg font-medium text-gray-700 hover:text-black transition-colors duration-300 after:content-[''] after:absolute after:left-0 after:bottom-0 after:w-0 after:h-[2px] after:bg-black after:transition-all after:duration-300 hover:after:w-full"
               >
                 T-Shirts
-              </Link>
+              </button>
             </li>
             <li>
-              <Link
-                href={{ pathname: "/search", query: { q: "Hoodie" } }}
+              <button
+                onClick={() => handleNavClick("/search?q=Hoodie")}
                 className="relative text-lg font-medium text-gray-700 hover:text-black transition-colors duration-300 after:content-[''] after:absolute after:left-0 after:bottom-0 after:w-0 after:h-[2px] after:bg-black after:transition-all after:duration-300 hover:after:w-full"
               >
                 Hoodies
-              </Link>
+              </button>
             </li>
             <li>
-              <Link
-                href="/orders"
+              <button
+                onClick={() => { handleNavClick("/orders") }}
                 className="relative text-lg font-medium text-gray-700 hover:text-black transition-colors duration-300 after:content-[''] after:absolute after:left-0 after:bottom-0 after:w-0 after:h-[2px] after:bg-black after:transition-all after:duration-300 hover:after:w-full"
               >
                 My Orders
-              </Link>
+              </button>
             </li>
           </ul>
           <div
@@ -230,20 +236,20 @@ const Navbar = ({ products }: NavbarProps) => {
                     <div className="absolute right-0 top-full mt-2 w-40 bg-white shadow-md border rounded-md z-50">
                       <ul className="py-2">
                         <li>
-                          <Link
-                            href="/profile"
+                          <button
+                            onClick={() => { handleNavClick("/profile") }}
                             className="block px-4 py-2 hover:bg-gray-100"
                           >
                             Profile
-                          </Link>
+                          </button>
                         </li>
                         <li>
-                          <Link
-                            href="/settings"
+                          <button
+                            onClick={() => { handleNavClick("/settings") }}
                             className="block px-4 py-2 hover:bg-gray-100"
                           >
                             Settings
-                          </Link>
+                          </button>
                         </li>
                         <li>
                           <button

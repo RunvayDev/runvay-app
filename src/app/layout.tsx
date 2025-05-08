@@ -40,7 +40,7 @@ export default async function RootLayout({ children }: { children: ReactNode }) 
   return (
     <html lang="en">
       <head>
-        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
         <meta charSet="UTF-8" />
         <meta name="description" content="Runvay — Modern E-commerce Platform" />
         <link rel="icon" href="/favicon.ico" />
