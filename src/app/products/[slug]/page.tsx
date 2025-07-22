@@ -41,17 +41,20 @@ async function getSuggestedProducts(
     notFound();
   }
  
-  const [reviews, suggestedProducts] = await Promise.all([
+  const [reviews, rawSuggestedProducts] = await Promise.all([
     getProductReviews(product._id.toString()),
     getSuggestedProducts(cachedProducts, slugDecoded),
   ]);
-  product._id= product._id.toString(); 
+
+  const plainProduct = JSON.parse(JSON.stringify(product));
+  const suggestedProducts = JSON.parse(JSON.stringify(rawSuggestedProducts));
+
   return (
     <main className="min-h-screen py-8">
-      <ProductDetail product={ product} />
+      <ProductDetail product={plainProduct} />
       <div className="container mx-auto px-4">
         <ProductReviews
-          productId={product._id.toString()}
+          productId={plainProduct._id}
           initialReviews={reviews}
         />
         <SuggestedProducts products={suggestedProducts} />
