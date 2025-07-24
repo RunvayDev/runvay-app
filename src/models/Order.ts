@@ -30,17 +30,12 @@ const orderSchema = new mongoose.Schema(
       country: { type: String, required: true },
     },
     paymentDetails: {
-      method: {
-        type: String,
-        enum: ["credit_card", "paypal", "cash_on_delivery"],
-        required: true,
-      },
-      status: {
-        type: String,
-        enum: ["paid", "pending", "failed"],
-        default: "pending",
-      },
-      transactionId: { type: String }, // Store transaction ID for online payments
+      orderId: { type: String },
+      paymentId: { type: String },
+      signature: { type: String },
+      status: { type: String, default: "pending" },
+      amount: { type: Number },
+      method: { type: String },
     },
     trackingNumber: { type: String }, // Optional field for shipped orders
   },

@@ -6,16 +6,75 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { useSession } from 'next-auth/react';
 import { useEffect } from 'react';
+import { useRouter } from 'next/navigation';
+
+
+declare const window: any;
 
 export default function CartPage() {
-  const { status } = useSession();
+  const { status, data: session } = useSession();
   const { cartItems, isSyncing, removeFromCart, updateQuantity, cartTotal } = useCart();
+  const router = useRouter();
 
   useEffect(() => {
     if (status === 'authenticated') {
       localStorage.removeItem('runvayCart'); // Clear local cart after login
     }
   }, [status]);
+
+  const handleCheckout = async () => {
+    if (status !== 'authenticated') {
+      router.push('/signin');
+      return;
+    }
+
+    try {
+      const res = await fetch('/api/razorpay', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          amount: cartTotal,
+          currency: 'INR',
+        }),
+      });
+
+      if (!res.ok) {
+        throw new Error('Failed to create Razorpay order');
+      }
+
+      const order = await res.json();
+
+      const options = {
+        key: process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID!,
+        amount: order.amount,
+        currency: order.currency,
+        name: 'Runvay',
+        description: 'Test Transaction',
+        order_id: order.id,
+        handler: async function (response: any) {
+          // alert('Payment successful!');
+          // You can handle the successful payment here
+          // e.g., save the order to your database
+          router.push('/orders');
+        },
+        prefill: {
+          name: session?.user?.name || '',
+          email: session?.user?.email || '',
+        },
+        theme: {
+          color: '#000000',
+        },
+      };
+
+      const rzp = new window.Razorpay(options);
+      rzp.open();
+    } catch (error) {
+      console.error('Checkout error:', error);
+      alert('Checkout failed. Please try again.');
+    }
+  };
 
   if (isSyncing) {
     return (
@@ -95,7 +154,10 @@ export default function CartPage() {
                 <span>Subtotal</span>
                 <span>₹{cartTotal.toFixed(2)}</span>
               </div>
-              <button className="w-full bg-black text-white py-3 rounded-lg hover:bg-gray-800 transition-colors">
+              <button 
+                onClick={handleCheckout}
+                className="w-full bg-black text-white py-3 rounded-lg hover:bg-gray-800 transition-colors"
+              >
                 Checkout
               </button>
             </div>
