@@ -1,4 +1,4 @@
-// app/cart/page.tsx
+'''// app/cart/page.tsx
 'use client'
 
 import { useCart } from '@/context/CartContext';
@@ -15,8 +15,29 @@ interface RazorpaySuccessResponse {
   razorpay_signature: string;
 }
 
+interface RazorpayOptions {
+  key: string;
+  amount: number;
+  currency: string;
+  name: string;
+  description: string;
+  order_id: string;
+  handler: (response: RazorpaySuccessResponse) => void;
+  prefill: {
+    name?: string;
+    email?: string;
+    contact?: string;
+  };
+  notes?: {
+    [key: string]: string;
+  };
+  theme?: {
+    color: string;
+  };
+}
+
 declare const window: {
-  Razorpay: new (options: any) => {
+  Razorpay: new (options: RazorpayOptions) => {
     open: () => void;
   };
 };
@@ -73,6 +94,7 @@ export default function CartPage() {
         throw new Error('Failed to create order in the database.');
       }
 
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
       const _dbOrder = await orderRes.json();
 
       // 2. Create a Razorpay order
@@ -94,14 +116,16 @@ export default function CartPage() {
       const razorpayOrder = await razorpayRes.json();
 
       // 3. Open the Razorpay checkout modal
-      const options = {
+      const options: RazorpayOptions = {
         key: process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID!,
         amount: razorpayOrder.amount,
         currency: razorpayOrder.currency,
         name: 'Runvay',
         description: 'Order Payment',
         order_id: razorpayOrder.id,
-        handler: function (_response: RazorpaySuccessResponse) {
+        handler: function (response: RazorpaySuccessResponse) {
+          // eslint-disable-next-line @typescript-eslint/no-unused-vars
+          const _response = response;
           // Payment successful, redirect to orders page.
           // The webhook will handle updating the order status.
           router.push('/orders');
@@ -214,4 +238,4 @@ export default function CartPage() {
       </div>
     </>
   );
-}
+}''
