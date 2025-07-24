@@ -115,7 +115,17 @@ export default function CartPage() {
 
       const razorpayOrder = await razorpayRes.json();
 
-      // 3. Open the Razorpay checkout modal
+      // 3. Update the order in the database with the Razorpay order ID
+      await fetch(`/api/orders/${_dbOrder._id}`,
+        {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ razorpayOrderId: razorpayOrder.id }),
+        });
+
+      // 4. Open the Razorpay checkout modal
       const options: RazorpayOptions = {
         key: process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID!,
         amount: razorpayOrder.amount,
@@ -160,7 +170,7 @@ export default function CartPage() {
     <>
       <div className="container mx-auto px-4 py-8">
         <h1 className="text-3xl font-bold mb-8">Shopping Cart</h1>
-        
+
         {cartItems.length === 0 ? (
           <div className="text-center">
             <p className="text-gray-500 mb-4">Your cart is empty</p>
@@ -192,9 +202,9 @@ export default function CartPage() {
                       <select
                         value={item.quantity}
                         onChange={(e) => updateQuantity(
-                          item.productId, 
-                          item.size, 
-                          item.color, 
+                          item.productId,
+                          item.size,
+                          item.color,
                           parseInt(e.target.value)
                         )}
                         className="border rounded px-2 py-1"
@@ -226,7 +236,7 @@ export default function CartPage() {
                 <span>Subtotal</span>
                 <span>₹{cartTotal.toFixed(2)}</span>
               </div>
-              <button 
+              <button
                 onClick={handleCheckout}
                 className="w-full bg-black text-white py-3 rounded-lg hover:bg-gray-800 transition-colors"
               >
