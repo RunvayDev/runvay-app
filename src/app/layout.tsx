@@ -7,6 +7,8 @@ import { ReactNode } from "react";
 import "./globals.css"; // Or wherever your global styles are
 import Footer from "@/components/Footer";
 
+import Script from "next/script";
+
 interface Product {
   name: string;
   description?: string;
@@ -45,9 +47,9 @@ export default async function RootLayout({ children }: { children: ReactNode }) 
         <meta name="description" content="Runvay — Modern E-commerce Platform" />
         <link rel="icon" href="/favicon.ico" />
         <title>Runvay</title>
-        <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
       </head>
       <body className="flex flex-col">
+        <Script src="https://checkout.razorpay.com/v1/checkout.js" />
         <SessionProvider>
           <CartProvider>
             <Navbar products={products} />
