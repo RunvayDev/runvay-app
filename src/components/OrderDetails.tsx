@@ -85,7 +85,7 @@ export default function OrderDetails({ order, onBack }: OrderDetailsProps) {
               {new Date(order.createdAt).toLocaleDateString()}
             </p>
             <p>
-              <strong>Status:</strong> {order.status}
+              <strong>Delivery Status:</strong> {order.status}
             </p>
           </div>
 
