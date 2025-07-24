@@ -29,7 +29,44 @@ export default function CartPage() {
     }
 
     try {
-      const res = await fetch('/api/razorpay', {
+      // 1. Create the order in the database with a 'pending' status
+      const orderRes = await fetch('/api/orders', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          items: cartItems.map(item => ({
+            product: item.productId,
+            name: item.name,
+            price: item.price,
+            size: item.size,
+            color: item.color,
+            quantity: item.quantity,
+            image: item.image,
+            slug: item.slug,
+          })),
+          totalAmount: cartTotal,
+          shippingAddress: { // Placeholder shipping address
+            street: '123 Fashion Ave',
+            city: 'Styleburg',
+            zip: '12345',
+            country: 'Trendland',
+          },
+          paymentDetails: {
+            status: 'pending',
+          },
+        }),
+      });
+
+      if (!orderRes.ok) {
+        throw new Error('Failed to create order in the database.');
+      }
+
+      const dbOrder = await orderRes.json();
+
+      // 2. Create a Razorpay order
+      const razorpayRes = await fetch('/api/razorpay', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -40,23 +77,23 @@ export default function CartPage() {
         }),
       });
 
-      if (!res.ok) {
-        throw new Error('Failed to create Razorpay order');
+      if (!razorpayRes.ok) {
+        throw new Error('Failed to create Razorpay order.');
       }
 
-      const order = await res.json();
+      const razorpayOrder = await razorpayRes.json();
 
+      // 3. Open the Razorpay checkout modal
       const options = {
         key: process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID!,
-        amount: order.amount,
-        currency: order.currency,
+        amount: razorpayOrder.amount,
+        currency: razorpayOrder.currency,
         name: 'Runvay',
-        description: 'Test Transaction',
-        order_id: order.id,
-        handler: async function (response: any) {
-          // alert('Payment successful!');
-          // You can handle the successful payment here
-          // e.g., save the order to your database
+        description: 'Order Payment',
+        order_id: razorpayOrder.id,
+        handler: function (response: any) {
+          // Payment successful, redirect to orders page.
+          // The webhook will handle updating the order status.
           router.push('/orders');
         },
         prefill: {
@@ -70,9 +107,10 @@ export default function CartPage() {
 
       const rzp = new window.Razorpay(options);
       rzp.open();
+
     } catch (error) {
-      console.error('Checkout error:', error);
-      alert('Checkout failed. Please try again.');
+      console.error('Checkout Error:', error);
+      alert('An error occurred during checkout. Please try again.');
     }
   };
 
