@@ -9,7 +9,17 @@ import { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 
 
-declare const window: any;
+interface RazorpaySuccessResponse {
+  razorpay_payment_id: string;
+  razorpay_order_id: string;
+  razorpay_signature: string;
+}
+
+declare const window: {
+  Razorpay: new (options: any) => {
+    open: () => void;
+  };
+};
 
 export default function CartPage() {
   const { status, data: session } = useSession();
@@ -63,7 +73,7 @@ export default function CartPage() {
         throw new Error('Failed to create order in the database.');
       }
 
-      const dbOrder = await orderRes.json();
+      const _dbOrder = await orderRes.json();
 
       // 2. Create a Razorpay order
       const razorpayRes = await fetch('/api/razorpay', {
@@ -91,7 +101,7 @@ export default function CartPage() {
         name: 'Runvay',
         description: 'Order Payment',
         order_id: razorpayOrder.id,
-        handler: function (response: any) {
+        handler: function (_response: RazorpaySuccessResponse) {
           // Payment successful, redirect to orders page.
           // The webhook will handle updating the order status.
           router.push('/orders');
